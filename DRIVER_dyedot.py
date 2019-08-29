@@ -50,6 +50,7 @@ from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
+#from class_RawBuilder import rawData
 
 
 
@@ -103,7 +104,7 @@ RegionOfInterestGraph(output, loci).region()
 refpath = RegionOfInterestGraph(output, loci).referencegr()
 
 #CONSTRUCT THE REFERENCE PATH
-graph, refnodedata = RefGraphBuilder().referencepath(refpath)
+graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
 xgraph = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
