@@ -78,6 +78,7 @@ class RefGraphBuilder():
 
             x = Digraph(name=key, node_attr={'shape': 'cds', 'color': colour[randint(0, len(colour) - 1)],'fillcolor': colour[randint(0, len(colour) - 1)]} , engine='dot',edge_attr={'arrowhead': 'vee', 'arrowsize': '0.5', 'color': colour[randint(0, len(colour) - 1)],'penwidth':'4'})  # colour can also be set to use x11 names 'red'
             varnodedata = {}
+            varedgedata = []
             for i in range(1, len(varpath) - 1):
                 # if output[key][i][0] == loci[0] and int(output[key][i][1]) >= loci[1] and int(output[key][i][1]) <= loci[2]:
 
@@ -95,9 +96,13 @@ class RefGraphBuilder():
                     if matching: # exit pathways to a reference node
                         matching.append(key)
                         x.edge(varpath[i - 1][1] + varpath[i - 1][2], varpath[i][1] + varpath[i][2], label=str(' - '.join(matching)), color='black', style='dotted')
+                        ################
+                        ################ rethink how you're storing edges - rather use a dict of tuples to which you add additional data
+                        varedgedata = rawData().edgeData(refpath=varpath, i=i, nw=nw, edgedata=varedgedata)
                         matching = []
                     else:
                         x.edge(varpath[i - 1][1] + varpath[i - 1][2], varpath[i][1] + varpath[i][2], label=str(key))
+                        varedgedata = rawData().edgeData(refpath=varpath, i=i, nw=nw, edgedata=varedgedata)
 
                 else:
                     x.node(varpath[i - 1][1] + varpath[i - 1][2],label=str(varpath[i - 1][0] + ' ' + varpath[i - 1][1] + ' ' + varpath[i - 1][2]),width=str(nw))
@@ -111,11 +116,19 @@ class RefGraphBuilder():
                     else:
                         x.edge(varpath[i - 1][1] + varpath[i - 1][2], varpath[i][1] + varpath[i][2], label=str(key))
 
+            ## edge case nodes
+            x.node(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2], label=str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]))
 
             x.node(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2], label=str(varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]))
-            x.node(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2], label=str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]))
+            varnodedata[str(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2])] = ["label", str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]), "width", str(1.2)]
+            varnodedata[str(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])] = ["label", str(varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]), "width", str(1.2)]
+
+
             x.edge(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2],varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])
 
+
+
+            ## Not adding descriptor nodes/edges yet
             x.node(str(key), label=str(key))
             x.node(str(key + '_'), label=str('Path'))
             x.edge(str(key), str(key + '_'))
@@ -124,5 +137,5 @@ class RefGraphBuilder():
             allvar[key] = temp
 
             self.graph.subgraph(x)
-        return graph, varnodedata;
+        return graph, varnodedata, varpath;
 
