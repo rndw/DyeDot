@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.com/rndw/DyeDot.svg?branch=master)](https://travis-ci.com/rndw/DyeDot)
 
-# Project is end of life
+# Current focus:
+[ ] Add XML output for Cytoscape
+[ ] Expose data structures to other functions
+[ ] Manual plotting - Interactive plotting
 
 # DyeDot: Variation graphs from VCF
 
