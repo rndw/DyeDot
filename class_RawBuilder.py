@@ -14,12 +14,16 @@ class rawData():
         return nodedata
 
     ## not necessary to add node width (nw)
-    def edgeData(self, refpath, i, nw, edgedata):
+    def edgeData(self, refpath, i, nw, edgedata, key):
         self.refpath = refpath
         self.i = i
         self.nw = nw
         self.edgedata = edgedata
+        self.key = key
 
-        edgedata.append((str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]), str(self.refpath[self.i][1] + self.refpath[self.i][2])))
+        #edgedata.append((str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]), str(self.refpath[self.i][1] + self.refpath[self.i][2])))
+        #edge_attr = {'arrowhead': 'vee', 'arrowsize': '0.5', 'color': 'black', 'penwidth': '2'}
+
+        edgedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]), str(self.refpath[self.i][1] + self.refpath[self.i][2])] = ["label", self.key]
 
         return edgedata
