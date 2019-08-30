@@ -3,11 +3,14 @@ class rawData():
     def __init__(self):
         pass
 
-    def nodeData(self, refpath, i, nw, nodedata):
+    def nodeData(self, refpath, i, nw, nodedata, key):
         self.refpath = refpath
         self.i = i
         self.nw = nw
         self.nodedata = nodedata
+        ## expose key argument for nodes - might need at a later stage
+        self.key = key
+
 
         nodedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2])] = ["label", str(self.refpath[self.i - 1][0] + ' ' + self.refpath[self.i - 1][1] + ' ' + self.refpath[self.i - 1][2]), "width", str(self.nw)]
 

@@ -25,7 +25,7 @@ RegionOfInterestGraph(output, loci).region()
 refpath = RegionOfInterestGraph(output, loci).referencegr()
 graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 
-xgraph, varnodedata, varedgedata = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
 #str(refpath[len(refpath) - 1][1] + refpath[len(refpath) - 1][2])] = ["label", str(refpath[len(refpath) - 1][0] + ' ' + refpath[len(refpath) - 1][1] + ' ' +refpath[len(refpath) - 1][2]), "width", str(nw)]
 

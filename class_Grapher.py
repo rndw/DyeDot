@@ -10,7 +10,13 @@ class RefGraphBuilder():
 
     def referencepath(self,refpath):
         self.refpath = refpath
-        p = Digraph(name='REFERENCE', node_attr={'shape': 'cds', 'color': 'black', 'fillcolor': 'grey', 'fixedsize':'true'}, format='png',graph_attr={'splines': 'spline', 'rankdir': 'LR'},engine='dot',edge_attr={'arrowhead': 'vee', 'arrowsize': '0.5', 'color': 'black','penwidth':'2'})
+        key = 'REFERENCE'
+        ## colour setup
+        graphcol = 'black'
+        graphcolfill = 'grey'
+        graphcoledge = 'black'
+        ##
+        p = Digraph(name=key, node_attr={'shape': 'cds', 'color': graphcol, 'fillcolor': graphcolfill, 'fixedsize':'true'}, format='png',graph_attr={'splines': 'spline', 'rankdir': 'LR'},engine='dot',edge_attr={'arrowhead': 'vee', 'arrowsize': '0.5', 'color': graphcoledge,'penwidth':'2'})
         nw = 0
         nodedata = {}
         edgedata = {}
@@ -20,12 +26,12 @@ class RefGraphBuilder():
                 nw = 1.2
             ##### Return a dictionary of node attr to work with - interactive plotting
             #nodedata[str(self.refpath[i - 1][1] + self.refpath[i - 1][2])] = ["label", str(self.refpath[i - 1][0] + ' ' + self.refpath[i - 1][1] + ' ' + self.refpath[i - 1][2]), "width", str(nw)]
-            nodedata = rawData().nodeData(refpath=self.refpath, i=i, nw=nw, nodedata=nodedata)
+            nodedata = rawData().nodeData(refpath=self.refpath, i=i, nw=nw, nodedata=nodedata, key=key)
             #####
             p.node(self.refpath[i - 1][1] + self.refpath[i - 1][2],label=str(self.refpath[i - 1][0] + ' ' + self.refpath[i - 1][1] + ' ' + self.refpath[i - 1][2]), width = str(nw))
             #### NEED TO ADD FOR EDGES AS WELL
             p.edge(self.refpath[i - 1][1] + self.refpath[i - 1][2], self.refpath[i][1] + self.refpath[i][2])
-            edgedata = rawData().edgeData(refpath=self.refpath, i=i, nw=nw, edgedata=edgedata)
+            edgedata = rawData().edgeData(refpath=self.refpath, i=i, nw=nw, edgedata=edgedata, key=key)
 
         ## add second last and last node - edge case
         p.node(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2],label=str(self.refpath[len(self.refpath) - 2][0] + ' ' + self.refpath[len(self.refpath) - 2][1] + ' ' + self.refpath[len(self.refpath) - 2][2]))
@@ -57,14 +63,16 @@ class RefGraphBuilder():
         del colour[7:9]
         colour = sns.color_palette(colour)
         colour = colour.as_hex()
-        vargraphcol = colour[randint(0, len(colour) - 1)]
-        vargraphcolfill = colour[randint(0, len(colour) - 1)]
+        graphcol = colour[randint(0, len(colour) - 1)]
+        graphcolfill = colour[randint(0, len(colour) - 1)]
 
-        vargraphcoledge = colour[randint(0, len(colour) - 1)]
+        graphcoledge = colour[randint(0, len(colour) - 1)]
 
 
         ## newvar
         allvar = {}
+        allvaredge = {}
+        allvarnode = {}
         testref = [list(elem) for elem in refpath]
         ## newvar
 
@@ -84,7 +92,7 @@ class RefGraphBuilder():
 
             ### expose graph variables to other functions
 
-            x = Digraph(name=key, node_attr={'shape': 'cds', 'color': vargraphcol,'fillcolor': vargraphcolfill} , engine='dot',edge_attr={'arrowhead': 'vee', 'arrowsize': '0.5', 'color': vargraphcoledge,'penwidth':'4'})  # colour can also be set to use x11 names 'red'
+            x = Digraph(name=key, node_attr={'shape': 'cds', 'color': graphcol,'fillcolor': graphcolfill} , engine='dot',edge_attr={'arrowhead': 'vee', 'arrowsize': '0.5', 'color': graphcoledge,'penwidth':'4'})  # colour can also be set to use x11 names 'red'
             varnodedata = {}
             varedgedata = {}
             for i in range(1, len(varpath) - 1):
@@ -106,7 +114,7 @@ class RefGraphBuilder():
                         x.edge(varpath[i - 1][1] + varpath[i - 1][2], varpath[i][1] + varpath[i][2], label=str(' - '.join(matching)), color='black', style='dotted')
                         ################
                         ################ rethink how you're storing edges - rather use a dict of tuples to which you add additional data
-                        varedgedata = rawData().edgeData(refpath=varpath, i=i, nw=nw, edgedata=varedgedata)
+                        varedgedata = rawData().edgeData(refpath=varpath, i=i, nw=nw, edgedata=varedgedata, key=key)
                         matching = []
                     else:
                         x.edge(varpath[i - 1][1] + varpath[i - 1][2], varpath[i][1] + varpath[i][2], label=str(key))
@@ -114,7 +122,7 @@ class RefGraphBuilder():
 
                 else:
                     x.node(varpath[i - 1][1] + varpath[i - 1][2],label=str(varpath[i - 1][0] + ' ' + varpath[i - 1][1] + ' ' + varpath[i - 1][2]),width=str(nw))
-                    varnodedata = rawData().nodeData(refpath=varpath, i=i, nw=nw, nodedata=varnodedata)
+                    varnodedata = rawData().nodeData(refpath=varpath, i=i, nw=nw, nodedata=varnodedata, key=key)
                     matching = list(filter(lambda k: varpath[i] in allvar[k], allvar.keys()))
                     if matching:  ####################
                         matching.append(key)
@@ -145,5 +153,7 @@ class RefGraphBuilder():
             allvar[key] = temp
 
             self.graph.subgraph(x)
-        return graph, varnodedata, varpath;
+            allvarnode.update(varnodedata)
+            allvaredge.update(varedgedata)
+        return graph, varnodedata, varedgedata, allvarnode, allvaredge;
 

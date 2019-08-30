@@ -106,7 +106,7 @@ refpath = RegionOfInterestGraph(output, loci).referencegr()
 #CONSTRUCT THE REFERENCE PATH
 graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
-xgraph = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
 #ANOTHER FRIENDLY MESSAGE - OUTPUT FILE
 print(f'Writing output to: {str(args.o+".dot")}')

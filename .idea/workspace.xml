@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="872e5f50-607c-4451-a7cf-0d112e6fc39f" name="Default Changelist" comment="Update manual graph struct">
-      <change afterPath="$PROJECT_DIR$/To-Do.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DyeDot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DyeDot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DRIVER_dyedot.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRIVER_dyedot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/class_Grapher.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_Grapher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/class_RawBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_RawBuilder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scratchpad.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratchpad.py" afterDir="false" />
@@ -26,15 +23,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="243" />
-          <entry key="py" value="330" />
+          <entry key="Python Console" value="290" />
+          <entry key="py" value="667" />
           <entry key="txt" value="117" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="117" />
-          <entry key="Python" value="573" />
+          <entry key="Python" value="957" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -51,11 +48,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1560">
-              <caret line="108" selection-start-line="108" selection-end-line="109" />
+            <state relative-caret-position="406">
+              <caret line="108" column="118" selection-start-line="108" selection-start-column="118" selection-end-line="108" selection-end-column="118" />
               <folding>
                 <element signature="e#2132#2151#0" expanded="true" />
               </folding>
@@ -66,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class_Grapher.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="144" column="30" lean-forward="true" selection-start-line="144" selection-start-column="30" selection-end-line="144" selection-end-column="30" />
+            <state relative-caret-position="241">
+              <caret line="74" column="23" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="23" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -78,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class_RawBuilder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+            <state relative-caret-position="76">
+              <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -87,7 +84,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plotly_interactive.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1980">
+            <state relative-caret-position="451">
               <caret line="137" column="9" selection-start-line="137" selection-start-column="9" selection-end-line="137" selection-end-column="9" />
               <folding>
                 <element signature="e#65#86#0" expanded="true" />
@@ -104,17 +101,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scratchpad.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="19" column="33" selection-start-line="8" selection-end-line="28" />
+            <state relative-caret-position="345">
+              <caret line="27" selection-start-line="27" selection-end-line="27" selection-end-column="118" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/To-Do.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="95" selection-start-column="95" selection-end-column="95" />
+              <caret column="96" lean-forward="true" selection-start-column="96" selection-end-column="96" />
             </state>
           </provider>
         </entry>
@@ -133,6 +130,8 @@
       <find>self.refpath</find>
       <find>self.</find>
       <find>colour</find>
+      <find>nodedata</find>
+      <find>edgedata</find>
     </findStrings>
     <replaceStrings>
       <replace>varpath</replace>
@@ -152,11 +151,11 @@
       <list>
         <option value="$PROJECT_DIR$/plotly_interactive.py" />
         <option value="$PROJECT_DIR$/class_Helpers.py" />
-        <option value="$PROJECT_DIR$/DRIVER_dyedot.py" />
-        <option value="$PROJECT_DIR$/scratchpad.py" />
-        <option value="$PROJECT_DIR$/class_RawBuilder.py" />
-        <option value="$PROJECT_DIR$/class_Grapher.py" />
         <option value="$PROJECT_DIR$/To-Do.txt" />
+        <option value="$PROJECT_DIR$/class_RawBuilder.py" />
+        <option value="$PROJECT_DIR$/scratchpad.py" />
+        <option value="$PROJECT_DIR$/class_Grapher.py" />
+        <option value="$PROJECT_DIR$/DRIVER_dyedot.py" />
       </list>
     </option>
   </component>
@@ -243,19 +242,19 @@
     <option name="LAST_COMMIT_MESSAGE" value="Update manual graph struct" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
+    <entry file="file://$PROJECT_DIR$/To-Do.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1560">
-          <caret line="108" selection-start-line="108" selection-end-line="109" />
-          <folding>
-            <element signature="e#2132#2151#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="96" lean-forward="true" selection-start-column="96" selection-end-column="96" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/class_vcf_parser.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/plotly_interactive.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
+        <state relative-caret-position="451">
           <caret line="137" column="9" selection-start-line="137" selection-start-column="9" selection-end-line="137" selection-end-column="9" />
           <folding>
             <element signature="e#65#86#0" expanded="true" />
@@ -263,37 +262,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class_vcf_parser.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/class_RawBuilder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+        <state relative-caret-position="76">
+          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scratchpad.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="27" selection-start-line="27" selection-end-line="27" selection-end-column="118" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class_Grapher.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="144" column="30" lean-forward="true" selection-start-line="144" selection-start-column="30" selection-end-line="144" selection-end-column="30" />
+        <state relative-caret-position="241">
+          <caret line="74" column="23" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="23" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scratchpad.py">
+    <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="19" column="33" selection-start-line="8" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/To-Do.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="95" selection-start-column="95" selection-end-column="95" />
+        <state relative-caret-position="406">
+          <caret line="108" column="118" selection-start-line="108" selection-start-column="118" selection-end-line="108" selection-end-column="118" />
+          <folding>
+            <element signature="e#2132#2151#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
