@@ -96,8 +96,9 @@ class VarGraphCons():
         pass
 
 
-    def anchor_builder(self,dat):
+    def anchor_builder(self,dat,outDir):
         self.dat = dat
+        self.outDir = outDir
         anchor_string = []
 
         graphdb = {}
@@ -122,7 +123,7 @@ class VarGraphCons():
                 anchors = tuple(anchors) + tuple(temp)
                 anchors = sorted(anchors)
                 rebuild_genome = tuple(rebuild_genome) + tuple(anchors)  # (((anchors)),)
-                with open(str(key + '_' + 'graph_anchors'), 'w') as f:  # write to file as backup
+                with open(str(self.outDir + key + '_' + 'graph_anchors.txt'), 'w') as f:  # write to file as backup
                     for i in range(0, len(rebuild_genome) - 1):
                         f.write(str(''.join(
                             f'{rebuild_genome[i][0]}\t{rebuild_genome[i][1]}\t{rebuild_genome[i][2]}\t{rebuild_genome[i][3]}\n')))  # convert tuple to string and write to file
@@ -178,4 +179,5 @@ class RegionOfInterestGraph():
                     refpath = tuple(refpath) + (([i[0], i[1], 'REF']),)
             refpath = sorted(tuple(set(tuple(_) for _ in refpath))) # Get rid of duplicated nodes. Then convert back to tuple for indexing
             refpath = sorted(refpath, key=lambda x: int(x[1]))
+            print('Node merging completed for: ', key)
         return refpath

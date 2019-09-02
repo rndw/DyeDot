@@ -50,6 +50,7 @@ from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
+from class_Utils import dataUtils
 #from class_RawBuilder import rawData
 
 
@@ -64,6 +65,16 @@ parser.add_argument('-e', type=int, metavar='integer', nargs='?', default=20000,
 args = parser.parse_args()
 
 #FRIENDLY CMD ARGUMENT CORRECTION/WARNING/NOTIFICATIONS
+
+outDir = os.getcwd() + "/DyeDotOutput"
+try:
+    os.mkdir(outDir)
+except FileExistsError:
+    print("Directory exists, files will be overwritten!")
+    pass
+finally:
+    print(f"Output directory: {outDir}")
+
 print(f"Output will be written to {args.o}.dot: ")
 print(f"The region of interest is: {args.c}:{args.b}-{args.e}")
 path = args.p
@@ -96,7 +107,7 @@ start = time()
 #READ IN VCF FILES AS A DICT - EACH VARIANT IS A TUPLE(CHR, POS, ALT, REF) PER VCF/KEY
 ## -- Saving intermediate files in same dir as vcfs
 #Manual run : output = VarGraphCons().anchor_builder(dat)
-output = VarGraphCons().anchor_builder(dat)
+output = VarGraphCons().anchor_builder(dat, path)
 #LIMIT DATA TO SPECIFIED REGION
 #IMPROVEMENT: OUTPUT MULTIPLE RANGES OR BLOCKS
 RegionOfInterestGraph(output, loci).region()
@@ -107,6 +118,11 @@ refpath = RegionOfInterestGraph(output, loci).referencegr()
 graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
 xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+
+#Write objects to disk to resume
+objsToWrite = [graph, refnodedata, refedgedata, xgraph,varnodedata, varedgedata, allvarnode, allvaredge]
+dataUtils().resumeBck(objsToWrite, outDir)
+
 
 #ANOTHER FRIENDLY MESSAGE - OUTPUT FILE
 print(f'Writing output to: {str(args.o+".dot")}')

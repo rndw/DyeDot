@@ -1,6 +1,7 @@
 from random import randint
 from graphviz import Digraph
 import seaborn as sns
+#from seaborn import color_palette
 from class_RawBuilder import rawData
 
 class RefGraphBuilder():
@@ -9,6 +10,7 @@ class RefGraphBuilder():
         pass
 
     def referencepath(self,refpath):
+        print('Building reference Path...')
         self.refpath = refpath
         key = 'REFERENCE'
         ## colour setup
@@ -77,6 +79,7 @@ class RefGraphBuilder():
         ## newvar
 
         for key in self.output:
+            print('Building variant path for: ', key)
             varpath = ()
             for i in self.output[key]:
                 if i[0] == self.loci[0] and int(i[1]) >= self.loci[1] and int(i[1]) <= self.loci[2]:

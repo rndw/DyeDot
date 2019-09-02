@@ -14,28 +14,35 @@ from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
+from class_Utils import dataUtils
 
-loci = ['chrI',0,50000]
+#loci = ['chrI',0,50000]
+loci = ['chrVII', 0, 1050000]
 #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
-path = '/home/rndw/Github/DyeDot/Small_vcfs/'
+#path = '/home/rndw/Github/DyeDot/Small_vcfs/'
+path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
-output = VarGraphCons().anchor_builder(dat)
+output = VarGraphCons().anchor_builder(dat,path)
 RegionOfInterestGraph(output, loci).region()
 refpath = RegionOfInterestGraph(output, loci).referencegr()
 graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 
 xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
+dataUtils().resumeBck()
+
+
+#### Testings
+
 #str(refpath[len(refpath) - 1][1] + refpath[len(refpath) - 1][2])] = ["label", str(refpath[len(refpath) - 1][0] + ' ' + refpath[len(refpath) - 1][1] + ' ' +refpath[len(refpath) - 1][2]), "width", str(nw)]
 
-edgedata.append(  (str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]),str(self.refpath[self.i][1] + self.refpath[self.i][2]))  )
+#edgedata.append(  (str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]),str(self.refpath[self.i][1] + self.refpath[self.i][2]))  )
 
+#i = 1
+#nw = 1.2
+#edgedata = {}
 
-
-i = 1
-nw = 1.2
-edgedata = {}
-
-edgedata[str(refpath[i - 1][1] + refpath[i - 1][2]),str(refpath[i][1] + refpath[i][2])] = ["label", "nothing"]
+#edgedata[str(refpath[i - 1][1] + refpath[i - 1][2]),str(refpath[i][1] + refpath[i][2])] = ["label", "nothing"]
 # get value via list(edgedata.keys())[index] or list(edgedata.values())[index]
+

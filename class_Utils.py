@@ -14,4 +14,12 @@ class dataUtils():
     def __init__(self):
         pass
 
-    def resumeBck(self,graph, refnodedata, refedgedata, xgraph, varnodedata, varedgedata, allvarnode, allvaredge):
+    def resumeBck(self, objsToWrite, outDir):
+        self.objsToWrite = objsToWrite
+        self.outDir = outDir
+
+        self.objsToWrite = objsToWrite
+        for item in self.objsToWrite:
+
+
+        pass
