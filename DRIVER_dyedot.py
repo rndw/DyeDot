@@ -95,7 +95,7 @@ if name != 'posix' and not path.endswith('\\'):
     print(f'Path set to: {path}')
 #CONSTRUCT RANGE OBJECT
 # Are we resuming or not
-if not arg.r:
+if not args.r:
     #Default: loci = ['chrI',0,50000]
     loci = [args.c, args.b, args.e]
 
@@ -128,7 +128,7 @@ if not arg.r:
     #Write objects to disk to resume
     objsToWrite = [refnodedata, refedgedata, varnodedata, varedgedata, allvarnode, allvaredge]
     graphObjs = [graph, xgraph]
-    dataUtils().resumeBck(objsToWrite, outDir)
+    dataUtils().resumeBck(objsToWrite, graphObjs, outDir)
 
 ## Work on adding to main workflow - Done
 if args.r:
