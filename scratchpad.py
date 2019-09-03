@@ -10,17 +10,27 @@ for i in range(1, len(refpath) - 1):  # Has to start at one, else loopback in gr
 
 ## quick run start
 from os import name
+import os
 from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
 from class_Utils import dataUtils
 
+outDir = os.getcwd() + "/DyeDotOutput"
+try:
+    os.mkdir(outDir)
+except FileExistsError:
+    print("Directory exists, files will be overwritten!")
+    pass
+finally:
+    print(f"Output directory: {outDir}")
+
 #loci = ['chrI',0,50000]
 loci = ['chrVII', 0, 1050000]
 #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
-#path = '/home/rndw/Github/DyeDot/Small_vcfs/'
-path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
+path = '/home/rndw/Github/DyeDot/Small_vcfs/'
+#path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
 output = VarGraphCons().anchor_builder(dat,path)
@@ -30,8 +40,12 @@ graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 
 xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
-dataUtils().resumeBck()
+objsToWrite = [refnodedata, refedgedata, varnodedata, varedgedata, allvarnode, allvaredge]
+graphObjs = [graph, xgraph]
 
+dataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
+
+newobjstowrite = dataUtils().resumeFromBck(bckPath=outDir)
 
 #### Testings
 

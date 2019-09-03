@@ -30,3 +30,9 @@ class rawData():
         edgedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]), str(self.refpath[self.i][1] + self.refpath[self.i][2])] = ["label", self.key]
 
         return edgedata
+
+    def xmlOut(self):
+        pass
+
+    def xyCoord(self):
+        pass

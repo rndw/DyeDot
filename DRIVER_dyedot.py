@@ -62,6 +62,8 @@ parser.add_argument('-o', type=str, metavar='<filename>', help="Output filename"
 parser.add_argument('-c', type=str, metavar='chromosome', nargs='?', default='DEFAULT', const='DEFAULT', help='Chromosome to investigate (default: First element in graph dictionary)')
 parser.add_argument('-b', type=int, metavar='integer', nargs='?', default=0, const=0, help='Start location of region to investigate (default: 0 bp)')
 parser.add_argument('-e', type=int, metavar='integer', nargs='?', default=20000, const=20000, help='End location of region to investigate (default: 20 000 bp)')
+parser.add_argument('-r', type=str, metavar='bool', nargs='?', default=False, const='False', help='Should Dyedot resume from a backup. If set, -R required. (default: False)')
+parser.add_argument('-R', type=str, metavar='<path>', nargs='?', default='./', const='./', help='Path to Dyedot resume directory (default: ./)')
 args = parser.parse_args()
 
 #FRIENDLY CMD ARGUMENT CORRECTION/WARNING/NOTIFICATIONS
@@ -79,6 +81,7 @@ print(f"Output will be written to {args.o}.dot: ")
 print(f"The region of interest is: {args.c}:{args.b}-{args.e}")
 path = args.p
 #CHECK OS AND CORRECT PATH IF REQUIRED
+## write this into a class (Utils)
 if name == 'posix' and path.endswith('/'):
     print(f'Path is: {args.p}')
 if name != 'posix' and path.endswith('\\'):
@@ -90,39 +93,49 @@ if name != 'posix' and not path.endswith('\\'):
     path = path + '\\'
     print(f'Path set to: {path}')
 #CONSTRUCT RANGE OBJECT
-#Default: loci = ['chrI',0,50000]
-loci = [args.c, args.b, args.e]
+# Are we resuming or not
+if not arg.r:
+    #Default: loci = ['chrI',0,50000]
+    loci = [args.c, args.b, args.e]
 
-#path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
+    #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
 
-#CREATE A DICTIONARY OBJECT LINKING EACH KEY TO A VCF
-dat = ReadVcfs(path).variant_builder()
-#EXIT IF THE DIR CONTAINS NO VCFs
-if not dat:
-    print(f"No vcf files in directory. Please check path: {path}")
-    exit(1)
+    #CREATE A DICTIONARY OBJECT LINKING EACH KEY TO A VCF
+    dat = ReadVcfs(path).variant_builder()
+    #EXIT IF THE DIR CONTAINS NO VCFs
+    if not dat:
+        print(f"No vcf files in directory. Please check path: {path}")
+        exit(1)
 
-#UTILITY - WALL TIME. IF SSD OR FAST RAID SETUP, THREADING IMPROVES SPEED BY A FEW SECONDS. SLOWS DOWN WHEN ON MECHANICAL DSK
-start = time()
-#READ IN VCF FILES AS A DICT - EACH VARIANT IS A TUPLE(CHR, POS, ALT, REF) PER VCF/KEY
-## -- Saving intermediate files in same dir as vcfs
-#Manual run : output = VarGraphCons().anchor_builder(dat)
-output = VarGraphCons().anchor_builder(dat, path)
-#LIMIT DATA TO SPECIFIED REGION
-#IMPROVEMENT: OUTPUT MULTIPLE RANGES OR BLOCKS
-RegionOfInterestGraph(output, loci).region()
-#CONSTRUCT A REFERENCE PATH OBJECT. THIS COULD BE ANYTHING REALLY (HAPLOTYPES) - AS LONG AS IT CONTAINS OVERLAPPING NODES
-refpath = RegionOfInterestGraph(output, loci).referencegr()
+    #UTILITY - WALL TIME. IF SSD OR FAST RAID SETUP, THREADING IMPROVES SPEED BY A FEW SECONDS. SLOWS DOWN WHEN ON MECHANICAL DSK
+    start = time()
+    #READ IN VCF FILES AS A DICT - EACH VARIANT IS A TUPLE(CHR, POS, ALT, REF) PER VCF/KEY
+    ## -- Saving intermediate files in same dir as vcfs
+    #Manual run : output = VarGraphCons().anchor_builder(dat)
+    output = VarGraphCons().anchor_builder(dat, path)
+    #LIMIT DATA TO SPECIFIED REGION
+    #IMPROVEMENT: OUTPUT MULTIPLE RANGES OR BLOCKS
+    RegionOfInterestGraph(output, loci).region()
+    #CONSTRUCT A REFERENCE PATH OBJECT. THIS COULD BE ANYTHING REALLY (HAPLOTYPES) - AS LONG AS IT CONTAINS OVERLAPPING NODES
+    refpath = RegionOfInterestGraph(output, loci).referencegr()
 
-#CONSTRUCT THE REFERENCE PATH
-graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
-#CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
-xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+    #CONSTRUCT THE REFERENCE PATH
+    graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
+    #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
+    xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
-#Write objects to disk to resume
-objsToWrite = [graph, refnodedata, refedgedata, xgraph,varnodedata, varedgedata, allvarnode, allvaredge]
-dataUtils().resumeBck(objsToWrite, outDir)
+    #Write objects to disk to resume
+    objsToWrite = [refnodedata, refedgedata, varnodedata, varedgedata, allvarnode, allvaredge]
+    graphObjs = [graph, xgraph]
+    dataUtils().resumeBck(objsToWrite, outDir)
 
+## Work on adding to main workflow - Done
+if args.r:
+    objsToWrite = dataUtils().resumeFromBck(bckPath=outDir)
+    graph = objsToWrite[7]
+    xgraph = objsTowrite[8]
+    refnodedata = objsToWrite[0
+    ]
 
 #ANOTHER FRIENDLY MESSAGE - OUTPUT FILE
 print(f'Writing output to: {str(args.o+".dot")}')

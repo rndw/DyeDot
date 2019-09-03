@@ -1,3 +1,6 @@
+import pickle
+import hashlib
+
 class Ptools():
 
     def __init__(self):
@@ -14,12 +17,38 @@ class dataUtils():
     def __init__(self):
         pass
 
-    def resumeBck(self, objsToWrite, outDir):
+    def resumeBck(self, objsToWrite, graphObjs, outDir):
         self.objsToWrite = objsToWrite
+        self.graphObjs = graphObjs
         self.outDir = outDir
 
-        self.objsToWrite = objsToWrite
-        for item in self.objsToWrite:
+        if not self.outDir.endswith('/'):
+            self.outDir = self.outDir + '/'
 
+        for idx, item in enumerate(self.objsToWrite):
+            print(idx, item)
+            with open(self.outDir + str(idx) + '_DDbackup.txt', 'w') as f:
+                f.write(str(item)) # can only write strings, not dictionaries
 
-        pass
+        with open(self.outDir + 'DDbackup.pickle', 'wb') as file:
+            pickle.dump(objsToWrite, file)
+            pickle.dump(self.graphObjs, file)
+
+        md5 = hashlib.md5()
+        ## Add md5sum to check pickle file
+        ## Not sure how useful this would be
+        with open(self.outDir + 'DDbackup.pickle', 'rb') as file:
+            data = file.read() # block size added as 2**20 - remove
+            md5.update(data)
+            with open(self.outDir + 'pickleMD5.txt', 'w') as md5file:
+                md5file.write(str(md5.hexdigest()))
+                print(md5.hexdigest())
+
+    def resumeFromBck(self, bckPath):
+        self.bckPath = bckPath
+
+        if not self.bckPath.endswith('/'):
+            self.bckPath = self.bckPath + '/'
+            with open(self.bckPath + 'DDbackup.pickle', 'rb') as resumeFile:
+                objsToWrite = pickle.load(resumeFile)
+        return objsToWrite

@@ -156,7 +156,7 @@ class RefGraphBuilder():
             allvar[key] = temp
 
             self.graph.subgraph(x)
-            allvarnode.update(varnodedata)
-            allvaredge.update(varedgedata)
+            allvarnode[key] = varnodedata
+            allvaredge[key] = varedgedata
         return graph, varnodedata, varedgedata, allvarnode, allvaredge;
 
