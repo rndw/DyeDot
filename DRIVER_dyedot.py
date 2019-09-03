@@ -46,6 +46,7 @@
 ###############################################
 
 from os import name
+import os
 from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph

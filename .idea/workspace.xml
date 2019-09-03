@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="872e5f50-607c-4451-a7cf-0d112e6fc39f" name="Default Changelist" comment="Update manual graph struct">
-      <change beforePath="$PROJECT_DIR$/.idea/DyeDot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DyeDot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DRIVER_dyedot.py" beforeDir="false" afterPath="$PROJECT_DIR$/DRIVER_dyedot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_Grapher.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_Grapher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_RawBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_RawBuilder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_Utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_Utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_parsetools.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_parsetools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scratchpad.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratchpad.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +33,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class_Utils.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="207">
@@ -60,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="130" selection-start-line="130" selection-end-line="130" />
+            <state relative-caret-position="258">
+              <caret line="47" column="19" lean-forward="true" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -72,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scratchpad.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="43" selection-start-line="43" selection-end-line="45" selection-end-column="81" />
+            <state relative-caret-position="690">
+              <caret line="46" lean-forward="true" selection-start-line="9" selection-end-line="46" />
               <folding>
                 <element signature="e#479#498#0" expanded="true" />
               </folding>
@@ -101,6 +93,7 @@
       <find>RegionOfInterestGraph</find>
       <find>referencep</find>
       <find>open</find>
+      <find>graph</find>
     </findStrings>
     <replaceStrings>
       <replace>varpath</replace>
@@ -119,11 +112,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/class_parsetools.py" />
-        <option value="$PROJECT_DIR$/DRIVER_dyedot.py" />
         <option value="$PROJECT_DIR$/class_RawBuilder.py" />
         <option value="$PROJECT_DIR$/class_Grapher.py" />
         <option value="$PROJECT_DIR$/scratchpad.py" />
         <option value="$PROJECT_DIR$/class_Utils.py" />
+        <option value="$PROJECT_DIR$/DRIVER_dyedot.py" />
       </list>
     </option>
   </component>
@@ -299,23 +292,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scratchpad.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="43" selection-start-line="43" selection-end-line="45" selection-end-column="81" />
-          <folding>
-            <element signature="e#479#498#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/class_Utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="207">
@@ -323,6 +299,23 @@
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scratchpad.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="46" lean-forward="true" selection-start-line="9" selection-end-line="46" />
+          <folding>
+            <element signature="e#479#498#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DRIVER_dyedot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="47" column="19" lean-forward="true" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
         </state>
       </provider>
     </entry>
