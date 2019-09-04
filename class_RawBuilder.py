@@ -12,7 +12,7 @@ class rawData():
         self.key = key
 
 
-        nodedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2])] = ["label", str(self.refpath[self.i - 1][0] + ' ' + self.refpath[self.i - 1][1] + ' ' + self.refpath[self.i - 1][2]), "width", str(self.nw)]
+        nodedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2])] = {"label": str(self.refpath[self.i - 1][0] + ' ' + self.refpath[self.i - 1][1] + ' ' + self.refpath[self.i - 1][2]), "width": str(self.nw)}
 
         return nodedata
 
@@ -36,3 +36,6 @@ class rawData():
 
     def xyCoord(self):
         pass
+
+
+## TESTING

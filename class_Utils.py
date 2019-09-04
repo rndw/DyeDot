@@ -25,13 +25,14 @@ class dataUtils():
         if not self.outDir.endswith('/'):
             self.outDir = self.outDir + '/'
 
-        for idx, item in enumerate(self.objsToWrite):
-            print(idx, item)
-            with open(self.outDir + str(idx) + '_DDbackup.txt', 'w') as f:
-                f.write(str(item)) # can only write strings, not dictionaries
+        for item in self.objsToWrite.keys():
+            #print(idx, item)
+            with open(self.outDir + item + '_DDbackup.txt', 'w') as f:
+                f.write(str(objsToWrite[item])) # can only write strings, not dictionaries
 
         with open(self.outDir + 'DDbackup.pickle', 'wb') as file:
-            pickle.dump(objsToWrite, file)
+            pickle.dump(self.objsToWrite, file)
+        with open(self.outDir + 'DDbackup_graphs.pickle', 'wb') as file:
             pickle.dump(self.graphObjs, file)
 
         md5 = hashlib.md5()
@@ -51,4 +52,6 @@ class dataUtils():
             self.bckPath = self.bckPath + '/'
             with open(self.bckPath + 'DDbackup.pickle', 'rb') as resumeFile:
                 objsToWrite = pickle.load(resumeFile)
-        return objsToWrite
+            with open(self.bckPath + 'DDbackup_graphs.pickle', 'rb') as resumeFile:
+                graphObjs = pickle.load(resumeFile)
+        return objsToWrite, graphObjs

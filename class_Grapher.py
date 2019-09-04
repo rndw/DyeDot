@@ -39,8 +39,8 @@ class RefGraphBuilder():
         p.node(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2],label=str(self.refpath[len(self.refpath) - 2][0] + ' ' + self.refpath[len(self.refpath) - 2][1] + ' ' + self.refpath[len(self.refpath) - 2][2]))
         p.node(self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2],label=str(self.refpath[len(self.refpath) - 1][0] + ' ' + self.refpath[len(self.refpath) - 1][1] + ' ' + self.refpath[len(self.refpath) - 1][2]))
         ## special edgecase nodes (pun intended)
-        nodedata[str(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2])] = ["label", str(self.refpath[len(self.refpath) - 2][0] + ' ' + self.refpath[len(self.refpath) - 2][1] + ' ' + self.refpath[len(self.refpath) - 2][2]), "width", str(1.2)]
-        nodedata[str(self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])] = ["label", str(self.refpath[len(self.refpath) - 1][0] + ' ' + self.refpath[len(self.refpath) - 1][1] + ' ' + self.refpath[len(self.refpath) - 1][2]), "width", str(1.2)]
+        nodedata[str(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2])] = {"label": str(self.refpath[len(self.refpath) - 2][0] + ' ' + self.refpath[len(self.refpath) - 2][1] + ' ' + self.refpath[len(self.refpath) - 2][2]), "width": str(1.2)}
+        nodedata[str(self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])] = {"label": str(self.refpath[len(self.refpath) - 1][0] + ' ' + self.refpath[len(self.refpath) - 1][1] + ' ' + self.refpath[len(self.refpath) - 1][2]), "width": str(1.2)}
 
         ##
         p.edge(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2],self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])
@@ -139,8 +139,8 @@ class RefGraphBuilder():
             x.node(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2], label=str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]))
 
             x.node(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2], label=str(varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]))
-            varnodedata[str(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2])] = ["label", str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]), "width", str(1.2)]
-            varnodedata[str(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])] = ["label", str(varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]), "width", str(1.2)]
+            varnodedata[str(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2])] = {"label": str(varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]), "width": str(1.2)}
+            varnodedata[str(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])] = {"label": str(varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]), "width": str(1.2)}
 
 
             x.edge(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2],varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])
@@ -160,3 +160,6 @@ class RefGraphBuilder():
             allvaredge[key] = varedgedata
         return graph, varnodedata, varedgedata, allvarnode, allvaredge;
 
+
+
+#### TESTING

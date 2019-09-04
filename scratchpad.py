@@ -29,7 +29,7 @@ finally:
 #loci = ['chrI',0,50000]
 loci = ['chrVII', 0, 1050000]
 #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
-path = '/home/rndw/Github/DyeDot/Small_vcfs/'
+path = '/home/rndw/Github/DyeDot/VCF/'
 #path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
@@ -40,8 +40,8 @@ graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 
 xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
-objsToWrite = [refnodedata, refedgedata, varnodedata, varedgedata, allvarnode, allvaredge]
-graphObjs = [graph, xgraph]
+objsToWrite = {'refnodedata':refnodedata, 'refedgedata':refedgedata, 'varnodedata':varnodedata, 'varedgedata':varedgedata, 'allvarnode':allvarnode, 'allvaredge':allvaredge}
+graphObjs = {'graph':graph, 'xgraph':xgraph}
 
 dataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
 

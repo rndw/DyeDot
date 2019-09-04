@@ -58,13 +58,13 @@ from class_Utils import dataUtils
 
 #PARSER FOR CMD ARGUMENTS
 parser = argparse.ArgumentParser(description='Read in vcf files and constructs a variations graph', prog='DyeDot')
-parser.add_argument('-p', metavar='<path>', type=str, help="Path to vcf files")
-parser.add_argument('-o', type=str, metavar='<filename>', help="Output filename")
+parser.add_argument('-p', metavar='<path>', nargs='?', default= os.getcwd() + '/VCF', type=str, help="Path to vcf files")
+parser.add_argument('-o', type=str, metavar='<filename>', nargs='?', default='DyeDotOutput/DDoutputfile', const='DyeDotOutput/DDoutputfile', help="Output filename (default: ./DyeDotOutput/DDoutputfile)")
 parser.add_argument('-c', type=str, metavar='chromosome', nargs='?', default='DEFAULT', const='DEFAULT', help='Chromosome to investigate (default: First element in graph dictionary)')
 parser.add_argument('-b', type=int, metavar='integer', nargs='?', default=0, const=0, help='Start location of region to investigate (default: 0 bp)')
 parser.add_argument('-e', type=int, metavar='integer', nargs='?', default=20000, const=20000, help='End location of region to investigate (default: 20 000 bp)')
 parser.add_argument('-r', type=str, metavar='bool', nargs='?', default=False, const='False', help='Should Dyedot resume from a backup. If set, -R required. (default: False)')
-parser.add_argument('-R', type=str, metavar='<path>', nargs='?', default='./', const='./', help='Path to Dyedot resume directory (default: ./)')
+#parser.add_argument('-R', type=str, metavar='<path>', nargs='?', default='./DyeDotOutput', const='./DyeDotOutput', help='Path to Dyedot resume directory (default: ./)')
 args = parser.parse_args()
 
 #FRIENDLY CMD ARGUMENT CORRECTION/WARNING/NOTIFICATIONS
@@ -122,27 +122,45 @@ if not args.r:
 
     #CONSTRUCT THE REFERENCE PATH
     graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
+
     #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
     xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
 
     #Write objects to disk to resume
-    objsToWrite = [refnodedata, refedgedata, varnodedata, varedgedata, allvarnode, allvaredge]
-    graphObjs = [graph, xgraph]
-    dataUtils().resumeBck(objsToWrite, graphObjs, outDir)
+    #This would work better as a dictionary - why did I make it a list? - DONE
+    objsToWrite = {'refnodedata':refnodedata, 'refedgedata':refedgedata, 'varnodedata':varnodedata, 'varedgedata':varedgedata, 'allvarnode':allvarnode, 'allvaredge':allvaredge}
+    graphObjs = {'graph':graph, 'xgraph':xgraph}
+    dataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
 
 ## Work on adding to main workflow - Done
 if args.r:
-    objsToWrite = dataUtils().resumeFromBck(bckPath=outDir)
-    graph = objsToWrite[7]
-    xgraph = objsTowrite[8]
-    refnodedata = objsToWrite[0
-    ]
+    # timing
+    start = time()
+
+    outDir = os.getcwd() + "/DyeDotOutput"
+    objsToWrite, graphObjs = dataUtils().resumeFromBck(bckPath=outDir)
+    #Again, if this was a dict, we wouldn't have to hardcode idx - DONE
+    graph = graphObjs['graph']
+    xgraph = graphObjs['xgraph']
+    refnodedata = objsToWrite['refnodedata']
+    refedgedata = objsToWrite['refedgedata']
+    varnodedata = objsToWrite['varnodedata']
+    varedgedata = objsToWrite['varedgedata']
+    allvarnode = objsToWrite['allvarnode']
+    allvaredge = objsToWrite['allvaredge']
 
 #ANOTHER FRIENDLY MESSAGE - OUTPUT FILE
 print(f'Writing output to: {str(args.o+".dot")}')
 #SAVE THE GRAPH IN DOT FORMAT
 #IMPROVEMENT: LOOK AT ALTERNATIVE ALGORITHMS/ENGINES - MAYBE NEATO?
 graph.save(filename=str(args.o+'.dot'))
+
+# MANUAL PLOTTING
+# COORDINATES
+
+
+
+
 
 #PRINT TIME TAKEN ~ 80s FOR TEST DATA
 end = time()
