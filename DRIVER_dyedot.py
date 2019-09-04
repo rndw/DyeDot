@@ -48,6 +48,8 @@
 from os import name
 import os
 from time import time
+#import statistics as stats
+import math
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
@@ -158,6 +160,8 @@ graph.save(filename=str(args.o+'.dot'))
 # MANUAL PLOTTING
 # COORDINATES
 
+# y position
+REFy = math.ceil((len(dat.keys()) + 1) / 2)
 
 
 
