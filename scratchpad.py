@@ -15,7 +15,7 @@ from time import time
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
-from class_Utils import dataUtils
+from class_Utils import DataUtils
 
 outDir = os.getcwd() + "/DyeDotOutput"
 try:
@@ -33,19 +33,28 @@ path = '/home/rndw/Github/DyeDot/VCF/'
 #path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
-output = VarGraphCons().anchor_builder(dat,path)
+output = VarGraphCons().anchor_builder(dat, path)
+# LIMIT DATA TO SPECIFIED REGION
+# IMPROVEMENT: OUTPUT MULTIPLE RANGES OR BLOCKS
 RegionOfInterestGraph(output, loci).region()
+# CONSTRUCT A REFERENCE PATH OBJECT. THIS COULD BE ANYTHING REALLY (HAPLOTYPES) - AS LONG AS IT CONTAINS OVERLAPPING NODES
 refpath = RegionOfInterestGraph(output, loci).referencegr()
-graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
 
-xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+# CONSTRUCT THE REFERENCE PATH
+graph, refnodedata, refedgedata = RefGraphBuilder(refpath=refpath).referencepath()
 
-objsToWrite = {'refnodedata':refnodedata, 'refedgedata':refedgedata, 'varnodedata':varnodedata, 'varedgedata':varedgedata, 'allvarnode':allvarnode, 'allvaredge':allvaredge}
-graphObjs = {'graph':graph, 'xgraph':xgraph}
+# CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
+xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output, graph,
+                                                                                                        loci, refpath)
 
-dataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
+# Write objects to disk to resume
+# This would work better as a dictionary - why did I make it a list? - DONE
+objsToWrite = {'refnodedata': refnodedata, 'refedgedata': refedgedata, 'varnodedata': varnodedata,
+               'varedgedata': varedgedata, 'allvarnode': allvarnode, 'allvaredge': allvaredge}
+graphObjs = {'graph': graph, 'xgraph': xgraph}
+DataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs, outDir=outDir)
 
-newobjstowrite = dataUtils().resumeFromBck(bckPath=outDir)
+#newobjstowrite = dataUtils().resumeFromBck(bckPath=outDir)
 
 #### Testings
 

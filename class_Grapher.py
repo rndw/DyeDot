@@ -59,8 +59,8 @@ class RefGraphBuilder:
         #
         p.edge(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2],
                self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])
-        edgedata[str(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2]), str(
-            self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])] = ["label", "Ref"]
+        edgedata[str(self.refpath[len(self.refpath) - 2][1] + " " + self.refpath[len(self.refpath) - 2][2])] = {'To': str(
+            self.refpath[len(self.refpath) - 1][1] + " " + self.refpath[len(self.refpath) - 1][2]), "label": "REFERENCE"}
 
         # Not adding descriptor nodes/edges yet
         p.node(str('REF'), label=str('Reference'), width='1.6')

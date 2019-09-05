@@ -20,8 +20,8 @@ class RawData:
     def edgeData(self, edgedata):
         self.edgedata = edgedata
 
-        edgedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2]), str(
-            self.refpath[self.i][1] + self.refpath[self.i][2])] = ["label", self.key]
+        edgedata[str(self.refpath[self.i - 1][1] + " " + self.refpath[self.i - 1][2])] ={'To': str(
+            self.refpath[self.i][1] + " " + self.refpath[self.i][2]), "label": self.key}
 
         return edgedata
 

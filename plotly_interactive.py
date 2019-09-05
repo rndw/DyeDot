@@ -1,97 +1,281 @@
 
-### plotly the graph
-#G = nx.random_geometric_graph(200, 0.125)
-import networkx as nx
+# y position
+REFy = math.ceil((len(objsToWrite['allvarnode'].keys()) + 1) / 2)
+# Need to build index for dictionary
+refNodeKeys = list(refnodedata.keys())
+
+node_xc = []
+node_yc = []
+for i in range(0,len(refNodeKeys)):
+    refnodedata[refNodeKeys[i]]['y'] = REFy
+    refnodedata[refNodeKeys[i]]['x'] = refnodedata[refNodeKeys[i]]['label'].split()[1]
+    node_xc.append(refnodedata[refNodeKeys[i]]['label'].split()[1])
+    node_yc.append(REFy)
+
+# add edges
+# create dict index
+refEdgeKeys = list(refedgedata.keys())
+
+edge_xc = []
+edge_yc = []
+for i in range(0,len(refedgedata)):
+    # need to add y vars
+    #refedgedata[refEdgeKeys[i]]['x'] = refEdgedata[refNodeKeys[i]]['label'].split()[1]
+    # From node
+    edge_xc.append(refEdgeKeys[i].split()[0])
+    # To node
+    edge_xc.append(refedgedata[refEdgeKeys[i]]['To'].split()[0])
+    # Limiter
+    edge_xc.append(None)
+    # Need for loop over here - using simple REFy for reference
+    edge_yc.append(REFy)
+    edge_yc.append(REFy)
+    edge_yc.append(None)
+
+# ADD VARIANT data
+# y position
+VARy = 1
+# Need to build index for dictionary
+varNodeKeys = list(allvarnode['yi38small'])
+
+node_xcv = []
+node_ycv = []
+for i in range(0,len(varNodeKeys)):
+    if 'REF' in allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[2]:
+        allvarnode['yi38small'][varNodeKeys[i]]['y'] = REFy
+        node_ycv.append(REFy)
+    else:
+        allvarnode['yi38small'][varNodeKeys[i]]['y'] = VARy
+        node_ycv.append(VARy)
+
+    allvarnode['yi38small'][varNodeKeys[i]]['x'] = allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1]
+    node_xcv.append(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1])
+
+# add edges
+# create dict index
+varEdgeKeys = list(allvaredge['yi38small'])
+
+
+edge_xcv = []
+edge_ycv = []
+
+for i in range(0,len(varNodeKeys) - 1):
+    edge_xcv.append(allvarnode['yi38small'][varNodeKeys[i]]['x'])
+    edge_ycv.append(allvarnode['yi38small'][varNodeKeys[i]]['y'])
+    edge_xcv.append(allvarnode['yi38small'][varNodeKeys[i + 1]]['x'])
+    edge_ycv.append(allvarnode['yi38small'][varNodeKeys[i + 1]]['y'])
+    edge_xcv.append(None)
+    edge_ycv.append(None)
+
+# only add non-reference nodes
+varNodeKeysUniq = []
+node_xcvu = []
+node_ycvu = []
+for i in range(0,len(varNodeKeys)):
+    if not 'REF' in varNodeKeys[i]:
+        varNodeKeysUniq.append(varNodeKeys[i])
+        node_xcvu.append(allvarnode['yi38small'][varNodeKeys[i]]['x'])
+        node_ycvu.append(allvarnode['yi38small'][varNodeKeys[i]]['y'])
+
+
+######################### mf1
+VARy = 3
+# Need to build index for dictionary
+varNodeKeys = list(allvarnode['mf1small'])
+
+node_xcvm = []
+node_ycvm = []
+for i in range(0,len(varNodeKeys)):
+    if 'REF' in allvarnode['mf1small'][varNodeKeys[i]]['label'].split()[2]:
+        allvarnode['mf1small'][varNodeKeys[i]]['y'] = REFy
+        node_ycvm.append(REFy)
+    else:
+        allvarnode['mf1small'][varNodeKeys[i]]['y'] = VARy
+        node_ycvm.append(VARy)
+
+    allvarnode['mf1small'][varNodeKeys[i]]['x'] = allvarnode['mf1small'][varNodeKeys[i]]['label'].split()[1]
+    node_xcvm.append(allvarnode['mf1small'][varNodeKeys[i]]['label'].split()[1])
+
+# add edges
+# create dict index
+varEdgeKeys = list(allvaredge['mf1small'])
+
+
+edge_xcvm = []
+edge_ycvm = []
+
+for i in range(0,len(varNodeKeys) - 1):
+    edge_xcvm.append(allvarnode['mf1small'][varNodeKeys[i]]['x'])
+    edge_ycvm.append(allvarnode['mf1small'][varNodeKeys[i]]['y'])
+    edge_xcvm.append(allvarnode['mf1small'][varNodeKeys[i + 1]]['x'])
+    edge_ycvm.append(allvarnode['mf1small'][varNodeKeys[i + 1]]['y'])
+    edge_xcvm.append(None)
+    edge_ycvm.append(None)
+
+# only add non-reference nodes
+varNodeKeysUniq = []
+node_xcvum = []
+node_ycvum = []
+for i in range(0,len(varNodeKeys)):
+    if not 'REF' in varNodeKeys[i]:
+        varNodeKeysUniq.append(varNodeKeys[i])
+        node_xcvum.append(allvarnode['mf1small'][varNodeKeys[i]]['x'])
+        node_ycvum.append(allvarnode['mf1small'][varNodeKeys[i]]['y'])
+        
+
+######################### mf1
+VARy = 0
+# Need to build index for dictionary
+varNodeKeys = list(allvarnode['j11small'])
+
+node_xcvj = []
+node_ycvj = []
+for i in range(0,len(varNodeKeys)):
+    if 'REF' in allvarnode['j11small'][varNodeKeys[i]]['label'].split()[2]:
+        allvarnode['j11small'][varNodeKeys[i]]['y'] = REFy
+        node_ycvj.append(REFy)
+    else:
+        allvarnode['j11small'][varNodeKeys[i]]['y'] = VARy
+        node_ycvj.append(VARy)
+
+    allvarnode['j11small'][varNodeKeys[i]]['x'] = allvarnode['j11small'][varNodeKeys[i]]['label'].split()[1]
+    node_xcvj.append(allvarnode['j11small'][varNodeKeys[i]]['label'].split()[1])
+
+# add edges
+# create dict index
+varEdgeKeys = list(allvaredge['j11small'])
+
+
+edge_xcvj = []
+edge_ycvj = []
+
+for i in range(0,len(varNodeKeys) - 1):
+    edge_xcvj.append(allvarnode['j11small'][varNodeKeys[i]]['x'])
+    edge_ycvj.append(allvarnode['j11small'][varNodeKeys[i]]['y'])
+    edge_xcvj.append(allvarnode['j11small'][varNodeKeys[i + 1]]['x'])
+    edge_ycvj.append(allvarnode['j11small'][varNodeKeys[i + 1]]['y'])
+    edge_xcvj.append(None)
+    edge_ycvj.append(None)
+
+# only add non-reference nodes
+varNodeKeysUniq = []
+node_xcvuj = []
+node_ycvuj = []
+for i in range(0,len(varNodeKeys)):
+    if not 'REF' in varNodeKeys[i]:
+        varNodeKeysUniq.append(varNodeKeys[i])
+        node_xcvuj.append(allvarnode['j11small'][varNodeKeys[i]]['x'])
+        node_ycvuj.append(allvarnode['j11small'][varNodeKeys[i]]['y'])
+
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 import plotly.plotly as py
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-import pandas as pd
 
-#edge_x = []
-#edge_y = []
-#for edge in g.edges():
-#    x0, y0 = g.node[edge[0]]['pos']
-#    x1, y1 = g.node[edge[1]]['pos']
-#    edge_x.append(x0)
-#    edge_x.append(x1)
-#    edge_x.append(None)
-#    edge_y.append(y0)
-#    edge_y.append(y1)
-#    edge_y.append(None)
-
-#custom setup
+# set the default zoom level
+# could ask user for this
+# should add dynamic scaling based on input (y axis)
+layout = go.Layout(
+    yaxis=dict(
+        range=[-0.5, 3.5]
+    ),
+    xaxis=dict(
+        range=[0, 500]
+    )
+)
 
 
-#edge_trace = go.Scatter(
-#    x=edge_xc, y=edge_yc,
-#    line=dict(width=0.5, color='#888'),
-#    hoverinfo='none',
-#    mode='lines')
-
-
-############alternative path
-#custom setup
-
-
-#edge_tracey = go.Scatter(
-#    x=edge_xcy, y=edge_ycy,
-#    line=dict(width=2, color='#200'),
-#    hoverinfo='none',
-#    mode='lines')
-
-#node_x = []
-#node_y = []
-#for node in g.nodes():
-#    x, y = g.node[node]['pos']
-#    node_x.append(x)
-#    node_y.append(y)
-
-
-
-
-
-#### coloring ### not my function
-node_adjacencies = []
-node_text = []
-for node, adjacencies in enumerate(g.adjacency()):
-    node_adjacencies.append(len(adjacencies[1]))
-    node_text.append('# of connections: '+str(len(adjacencies[1])))
-
-node_trace.marker.color = node_adjacencies
-node_trace.text = node_text
-
-
-### custom
-edge_xc = []
-edge_xc = [1,2,None,2,3,None,1,3,None]
-edge_yc = []
-edge_yc = [1,2,None,2,1,None,1,1,None]
-
-edge_xcy = []
-edge_xcy = [1,2,None]
-edge_ycy = []
-edge_ycy = [1,2,None]
-
-node_xc = []
-node_xc = [1,2,3]
-node_yc = []
-node_yc = [1,2,1]
-
-
-fig = go.Figure()
-
-# Add scatter trace for line
+fig = go.Figure(layout=layout)
+# add var edges
 fig.add_trace(go.Scatter(
-    x=edge_xcy, y=edge_ycy,
-    line=dict(width=2, color='#200'),
+    x=edge_xcv, y=edge_ycv,
+    line=dict(width=2, color='#888'),
     hoverinfo='none',
     mode='lines'))
+fig.add_trace(go.Scatter(
+    x=edge_xcvj, y=edge_ycvj,
+    line=dict(width=2, color='#888'),
+    hoverinfo='none',
+    mode='lines'))
+fig.add_trace(go.Scatter(
+    x=edge_xcvm, y=edge_ycvm,
+    line=dict(width=2, color='#888'),
+    hoverinfo='none',
+    mode='lines'))
+# add edges
 fig.add_trace(go.Scatter(
     x=edge_xc, y=edge_yc,
     line=dict(width=0.5, color='#888'),
     hoverinfo='none',
     mode='lines'))
+# Add var node trace
+fig.add_trace(go.Scatter(
+    x=node_xcvuj, y=node_ycvuj,
+    mode='markers',
+    hoverinfo='text',
+    marker=dict(
+        showscale=True,
+        # colorscale options
+        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
+        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
+        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
+        colorscale='YlGnBu',
+        reversescale=True,
+        color=[],
+        size=10,
+        colorbar=dict(
+            thickness=15,
+            title='Node Connections',
+            xanchor='left',
+            titleside='right'
+        ),
+        line_width=2)))
+
+
+fig.add_trace(go.Scatter(
+    x=node_xcvum, y=node_ycvum,
+    mode='markers',
+    hoverinfo='text',
+    marker=dict(
+        showscale=True,
+        # colorscale options
+        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
+        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
+        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
+        colorscale='YlGnBu',
+        reversescale=True,
+        color=[],
+        size=10,
+        colorbar=dict(
+            thickness=15,
+            title='Node Connections',
+            xanchor='left',
+            titleside='right'
+        ),
+        line_width=2)))
+
+fig.add_trace(go.Scatter(
+    x=node_xcvu, y=node_ycvu,
+    mode='markers',
+    hoverinfo='text',
+    marker=dict(
+        showscale=True,
+        # colorscale options
+        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
+        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
+        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
+        colorscale='YlGnBu',
+        reversescale=True,
+        color=[],
+        size=10,
+        colorbar=dict(
+            thickness=15,
+            title='Node Connections',
+            xanchor='left',
+            titleside='right'
+        ),
+        line_width=2)))
+### basic node trace
 fig.add_trace(go.Scatter(
     x=node_xc, y=node_yc,
     mode='markers',
@@ -114,6 +298,7 @@ fig.add_trace(go.Scatter(
         ),
         line_width=2)))
 
+# This needs to be updated on the fly - just a test at this stage
 fig.layout.update(
     shapes=[
         # 1st highlight during Feb 4 - Feb 6
@@ -135,4 +320,8 @@ fig.layout.update(
     ]
 )
 
-plot(fig)
+
+# comment out to allow CI pass
+# plot(fig, filename= str(outDir + '/' + 'DyeDot_int_output.html'))
+# Save locally
+fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
