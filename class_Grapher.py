@@ -52,7 +52,7 @@ class RefGraphBuilder():
         p.edge('REF', 'REF_')
 
         #print(nodedata)
-        return p, nodedata, edgedata;
+        return p, nodedata, edgedata
 
     def variantpath(self, output,graph,loci,refpath):
 
@@ -82,7 +82,7 @@ class RefGraphBuilder():
             print('Building variant path for: ', key)
             varpath = ()
             for i in self.output[key]:
-                if i[0] == self.loci[0] and int(i[1]) >= self.loci[1] and int(i[1]) <= self.loci[2]:
+                if i[0] == self.loci[0] and self.loci[1] <= int(i[1]) <= self.loci[2]:
                     varpath = sorted(
                         tuple(varpath) + (([i[0], i[1], i[3]]),))  # have to convert to int for sort - see refpath
                     varpath = sorted(varpath, key=lambda x: int(x[1]))
@@ -158,8 +158,6 @@ class RefGraphBuilder():
             self.graph.subgraph(x)
             allvarnode[key] = varnodedata
             allvaredge[key] = varedgedata
-        return graph, varnodedata, varedgedata, allvarnode, allvaredge;
-
-
+        return graph, varnodedata, varedgedata, allvarnode, allvaredge
 
 #### TESTING

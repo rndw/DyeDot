@@ -1,2 +1,6 @@
+pandas
+networkx
+plotly
+matplotlib
 seaborn==0.9.0
 graphviz==0.11.1

@@ -124,9 +124,9 @@ class VarGraphCons():
                 anchors = sorted(anchors)
                 rebuild_genome = tuple(rebuild_genome) + tuple(anchors)  # (((anchors)),)
                 with open(str(self.outDir + key + '_' + 'graph_anchors.txt'), 'w') as f:  # write to file as backup
-                    for i in range(0, len(rebuild_genome) - 1):
+                    for ind in range(0, len(rebuild_genome) - 1):
                         f.write(str(''.join(
-                            f'{rebuild_genome[i][0]}\t{rebuild_genome[i][1]}\t{rebuild_genome[i][2]}\t{rebuild_genome[i][3]}\n')))  # convert tuple to string and write to file
+                            f'{rebuild_genome[ind][0]}\t{rebuild_genome[ind][1]}\t{rebuild_genome[ind][2]}\t{rebuild_genome[ind][3]}\n')))  # convert tuple to string and write to file
             graphdb[key] = rebuild_genome
         return graphdb
 
