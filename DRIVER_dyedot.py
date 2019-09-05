@@ -53,8 +53,8 @@ import math
 import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
-from class_Utils import dataUtils
-#from class_RawBuilder import rawData
+from class_Utils import DataUtils
+#from class_RawBuilder import RawData
 
 
 
@@ -123,16 +123,16 @@ if not args.r:
     refpath = RegionOfInterestGraph(output, loci).referencegr()
 
     #CONSTRUCT THE REFERENCE PATH
-    graph, refnodedata, refedgedata = RefGraphBuilder().referencepath(refpath)
+    graph, refnodedata, refedgedata = RefGraphBuilder(refpath=refpath).referencepath()
 
     #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
-    xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder().variantpath(output, graph, loci, refpath)
+    xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output, graph, loci, refpath)
 
     #Write objects to disk to resume
     #This would work better as a dictionary - why did I make it a list? - DONE
     objsToWrite = {'refnodedata':refnodedata, 'refedgedata':refedgedata, 'varnodedata':varnodedata, 'varedgedata':varedgedata, 'allvarnode':allvarnode, 'allvaredge':allvaredge}
     graphObjs = {'graph':graph, 'xgraph':xgraph}
-    dataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
+    DataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs,outDir=outDir)
 
 ## Work on adding to main workflow - Done
 if args.r:
@@ -140,7 +140,7 @@ if args.r:
     start = time()
 
     outDir = os.getcwd() + "/DyeDotOutput"
-    objsToWrite, graphObjs = dataUtils().resumeFromBck(bckPath=outDir)
+    objsToWrite, graphObjs = DataUtils().resumeFromBck(bckPath=outDir)
     #Again, if this was a dict, we wouldn't have to hardcode idx - DONE
     graph = graphObjs['graph']
     xgraph = graphObjs['xgraph']

@@ -1,7 +1,8 @@
 import pickle
 import hashlib
 
-class Ptools():
+
+class Ptools:
 
     def __init__(self):
         pass
@@ -12,7 +13,8 @@ class Ptools():
     def tail(self, n=10):
         return self[len(self) - n - 1:]
 
-class dataUtils():
+
+class DataUtils:
 
     def __init__(self):
         pass
@@ -26,9 +28,9 @@ class dataUtils():
             self.outDir = self.outDir + '/'
 
         for item in self.objsToWrite.keys():
-            #print(idx, item)
+            # print(idx, item)
             with open(self.outDir + item + '_DDbackup.txt', 'w') as f:
-                f.write(str(objsToWrite[item])) # can only write strings, not dictionaries
+                f.write(str(objsToWrite[item]))  # can only write strings, not dictionaries
 
         with open(self.outDir + 'DDbackup.pickle', 'wb') as file:
             pickle.dump(self.objsToWrite, file)
@@ -39,7 +41,7 @@ class dataUtils():
         ## Add md5sum to check pickle file
         ## Not sure how useful this would be
         with open(self.outDir + 'DDbackup.pickle', 'rb') as file:
-            data = file.read() # block size added as 2**20 - remove
+            data = file.read()  # block size added as 2**20 - remove
             md5.update(data)
             with open(self.outDir + 'pickleMD5.txt', 'w') as md5file:
                 md5file.write(str(md5.hexdigest()))
