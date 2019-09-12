@@ -1,16 +1,25 @@
+## MERGE REFERENCE keys!
+#varNodeKeys = list(allvarnode['yi38small'])
+#for i in range(0,len(varNodeKeys)):
+#    if 'REF' in allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[2]:
+#        refnodedata[varNodeKeys[i]] = allvarnode['yi38small'][varNodeKeys[i]]
+
+
+
 
 # y position
 REFy = math.ceil((len(objsToWrite['allvarnode'].keys()) + 1) / 2)
 # Need to build index for dictionary
 refNodeKeys = list(refnodedata.keys())
 
+
 node_xc = []
 node_yc = []
 for i in range(0,len(refNodeKeys)):
-    refnodedata[refNodeKeys[i]]['y'] = REFy
+    refnodedata[refNodeKeys[i]]['y'] = int(REFy)
     refnodedata[refNodeKeys[i]]['x'] = refnodedata[refNodeKeys[i]]['label'].split()[1]
-    node_xc.append(refnodedata[refNodeKeys[i]]['label'].split()[1])
-    node_yc.append(REFy)
+    node_xc.append(int(refnodedata[refNodeKeys[i]]['label'].split()[1]))
+    node_yc.append(int(REFy))
 
 # add edges
 # create dict index
@@ -22,19 +31,19 @@ for i in range(0,len(refedgedata)):
     # need to add y vars
     #refedgedata[refEdgeKeys[i]]['x'] = refEdgedata[refNodeKeys[i]]['label'].split()[1]
     # From node
-    edge_xc.append(refEdgeKeys[i].split()[0])
+    edge_xc.append(int(refEdgeKeys[i].split()[0]))
     # To node
-    edge_xc.append(refedgedata[refEdgeKeys[i]]['To'].split()[0])
+    edge_xc.append(int(refedgedata[refEdgeKeys[i]]['To'].split()[0]))
     # Limiter
     edge_xc.append(None)
     # Need for loop over here - using simple REFy for reference
-    edge_yc.append(REFy)
-    edge_yc.append(REFy)
+    edge_yc.append(int(REFy))
+    edge_yc.append(int(REFy))
     edge_yc.append(None)
 
 # ADD VARIANT data
 # y position
-VARy = 1
+VARy = 1.99
 # Need to build index for dictionary
 varNodeKeys = list(allvarnode['yi38small'])
 
@@ -42,14 +51,14 @@ node_xcv = []
 node_ycv = []
 for i in range(0,len(varNodeKeys)):
     if 'REF' in allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[2]:
-        allvarnode['yi38small'][varNodeKeys[i]]['y'] = REFy
+        allvarnode['yi38small'][varNodeKeys[i]]['y'] = int(REFy)
         node_ycv.append(REFy)
     else:
-        allvarnode['yi38small'][varNodeKeys[i]]['y'] = VARy
-        node_ycv.append(VARy)
+        allvarnode['yi38small'][varNodeKeys[i]]['y'] = int(VARy)
+        node_ycv.append(int(VARy))
 
-    allvarnode['yi38small'][varNodeKeys[i]]['x'] = allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1]
-    node_xcv.append(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1])
+    allvarnode['yi38small'][varNodeKeys[i]]['x'] = int(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1])
+    node_xcv.append(int(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1]))
 
 # add edges
 # create dict index
@@ -60,10 +69,10 @@ edge_xcv = []
 edge_ycv = []
 
 for i in range(0,len(varNodeKeys) - 1):
-    edge_xcv.append(allvarnode['yi38small'][varNodeKeys[i]]['x'])
-    edge_ycv.append(allvarnode['yi38small'][varNodeKeys[i]]['y'])
-    edge_xcv.append(allvarnode['yi38small'][varNodeKeys[i + 1]]['x'])
-    edge_ycv.append(allvarnode['yi38small'][varNodeKeys[i + 1]]['y'])
+    edge_xcv.append(int(allvarnode['yi38small'][varNodeKeys[i]]['x']))
+    edge_ycv.append(int(allvarnode['yi38small'][varNodeKeys[i]]['y']))
+    edge_xcv.append(int(allvarnode['yi38small'][varNodeKeys[i + 1]]['x']))
+    edge_ycv.append(int(allvarnode['yi38small'][varNodeKeys[i + 1]]['y']))
     edge_xcv.append(None)
     edge_ycv.append(None)
 
@@ -74,8 +83,29 @@ node_ycvu = []
 for i in range(0,len(varNodeKeys)):
     if not 'REF' in varNodeKeys[i]:
         varNodeKeysUniq.append(varNodeKeys[i])
-        node_xcvu.append(allvarnode['yi38small'][varNodeKeys[i]]['x'])
-        node_ycvu.append(allvarnode['yi38small'][varNodeKeys[i]]['y'])
+        node_xcvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['x']))
+        node_ycvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['y']))
+
+## unique edges
+uedges_x = []
+uedges_y = []
+for i in node_xcvu:
+    print(i)
+    uedges_x.append((int(i) -1))
+    uedges_x.append(int(i))
+    uedges_x.append(None)
+
+    uedges_y.append(REFy)
+    uedges_y.append(VARy)
+    uedges_y.append(None)
+
+    uedges_x.append(int(i))
+    uedges_x.append((int(i) + 1))
+    uedges_x.append(None)
+
+    uedges_y.append(VARy)
+    uedges_y.append(REFy)
+    uedges_y.append(None)
 
 
 ######################### mf1
@@ -203,11 +233,16 @@ fig.add_trace(go.Scatter(
     hoverinfo='none',
     mode='lines'))
 # add edges
-fig.add_trace(go.Scatter(
+xlabs = [refnodedata[_]['label'] for _ in refnodedata.keys()]
+fig.add_trace(go.Scattergl(
     x=edge_xc, y=edge_yc,
     line=dict(width=0.5, color='#888'),
-    hoverinfo='none',
-    mode='lines'))
+    #hoverinfo='none',
+    hoverinfo=['all'],
+    mode='lines',
+    name='REFERENCE',
+    text=xlabs
+    ))
 # Add var node trace
 fig.add_trace(go.Scatter(
     x=node_xcvuj, y=node_ycvuj,
@@ -276,50 +311,58 @@ fig.add_trace(go.Scatter(
         ),
         line_width=2)))
 ### basic node trace
-fig.add_trace(go.Scatter(
+fig.add_trace(go.Scattergl(
     x=node_xc, y=node_yc,
     mode='markers',
-    hoverinfo='text',
-    marker=dict(
-        showscale=True,
-        # colorscale options
-        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
-        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
-        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
-        colorscale='YlGnBu',
-        reversescale=True,
-        color=[],
-        size=10,
-        colorbar=dict(
-            thickness=15,
-            title='Node Connections',
-            xanchor='left',
-            titleside='right'
-        ),
-        line_width=2)))
+    hoverinfo='all',
+    #hoverinfo='none',
+    marker=dict(size=12,line=dict(width=2,color='DarkSlateGrey')),
+    line_width=2,
+    text=xlabs,
+    name='REFERENCE'
+    ))
 
 # This needs to be updated on the fly - just a test at this stage
-fig.layout.update(
-    shapes=[
+x0 = [int(_) for _ in node_xc]
+y0 = [int(_) for _ in node_yc]
+x1 = [int(_) + 0.25 for _ in node_xc]
+y1 = [int(_) + 0.25 for _ in node_yc]
+fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')))
+#for i in range(len(node_xc)):
+#    fig.layout.update(
+#    shapes=[
         # 1st highlight during Feb 4 - Feb 6
-        go.layout.Shape(
-            type="rect",
+#        go.layout.Shape(
+#            type="rect",
             # x-reference is assigned to the x-values
-            xref="x",
+#            xref="x",
             # y-reference is assigned to the plot paper [0,1]
-            yref="paper",
-            x0=0.75,
-            y0=0.75,
-            x1=1.25,
-            y1=1.25,
-            fillcolor="LightSalmon",
-            opacity=0.5,
-            layer="below",
-            line_width=0,
-        ),
-    ]
-)
+#            yref="paper",
+#            x0=node_xc[i],
+#            y0=2,
+#            x1=node_xc[i],
+#            y1=2.25,
+#            fillcolor="LightSalmon",
+            #opacity=0.5,
+            #layer="below",
+#            line_width=2,
+#            ),
+#        ]
+#    )
 
+
+## test
+# how to create multiple shapes as dict
+
+
+nodeShapes = []
+for i in range(len(node_xc)):
+    nodeShapes.append({
+    'type':"rect", 'xref':'x1', 'yref':'y1', 'x0':node_xc[i], 'y0':2 - 0.15, 'x1':node_xc[i], 'y1':2.15, 'fillcolor':'blue'
+    })
+
+
+fig.layout.update(shapes=nodeShapes)
 
 # comment out to allow CI pass
 # plot(fig, filename= str(outDir + '/' + 'DyeDot_int_output.html'))

@@ -51,16 +51,16 @@ class RefGraphBuilder:
         # special edgecase nodes (pun intended)
         nodedata[str(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2])] = {"label": str(
             self.refpath[len(self.refpath) - 2][0] + ' ' + self.refpath[len(self.refpath) - 2][1] + ' ' +
-            self.refpath[len(self.refpath) - 2][2]), "width": str(1.2)}
+            self.refpath[len(self.refpath) - 2][2]), 'ID': "REFERENCE", "width": str(1.2)}
         nodedata[str(self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])] = {"label": str(
             self.refpath[len(self.refpath) - 1][0] + ' ' + self.refpath[len(self.refpath) - 1][1] + ' ' +
-            self.refpath[len(self.refpath) - 1][2]), "width": str(1.2)}
+            self.refpath[len(self.refpath) - 1][2]),'ID': "REFERENCE", "width": str(1.2)}
 
         #
         p.edge(self.refpath[len(self.refpath) - 2][1] + self.refpath[len(self.refpath) - 2][2],
                self.refpath[len(self.refpath) - 1][1] + self.refpath[len(self.refpath) - 1][2])
         edgedata[str(self.refpath[len(self.refpath) - 2][1] + " " + self.refpath[len(self.refpath) - 2][2])] = {'To': str(
-            self.refpath[len(self.refpath) - 1][1] + " " + self.refpath[len(self.refpath) - 1][2]), "label": "REFERENCE"}
+            self.refpath[len(self.refpath) - 1][1] + " " + self.refpath[len(self.refpath) - 1][2]), "label": "REFERENCE", 'ID': "REFERENCE"}
 
         # Not adding descriptor nodes/edges yet
         p.node(str('REF'), label=str('Reference'), width='1.6')
@@ -162,10 +162,10 @@ class RefGraphBuilder:
             x.node(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2], label=str(
                 varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]))
             varnodedata[str(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2])] = {"label": str(
-                varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]),
+                varpath[len(varpath) - 2][0] + ' ' + varpath[len(varpath) - 2][1] + ' ' + varpath[len(varpath) - 2][2]),'ID': key,
                 "width": str(1.2)}
             varnodedata[str(varpath[len(varpath) - 1][1] + varpath[len(varpath) - 1][2])] = {"label": str(
-                varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]),
+                varpath[len(varpath) - 1][0] + ' ' + varpath[len(varpath) - 1][1] + ' ' + varpath[len(varpath) - 1][2]), 'ID': key,
                 "width": str(1.2)}
 
             x.edge(varpath[len(varpath) - 2][1] + varpath[len(varpath) - 2][2],

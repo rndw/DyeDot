@@ -11,7 +11,7 @@ class RawData:
         # expose key argument for nodes - might need at a later stage
 
         nodedata[str(self.refpath[self.i - 1][1] + self.refpath[self.i - 1][2])] = {"label": str(
-            self.refpath[self.i - 1][0] + ' ' + self.refpath[self.i - 1][1] + ' ' + self.refpath[self.i - 1][2]),
+            self.refpath[self.i - 1][0] + ' ' + self.refpath[self.i - 1][1] + ' ' + self.refpath[self.i - 1][2]), 'ID': self.key,
             "width": str(self.nw)}
 
         return nodedata
@@ -21,7 +21,7 @@ class RawData:
         self.edgedata = edgedata
 
         edgedata[str(self.refpath[self.i - 1][1] + " " + self.refpath[self.i - 1][2])] ={'To': str(
-            self.refpath[self.i][1] + " " + self.refpath[self.i][2]), "label": self.key}
+            self.refpath[self.i][1] + " " + self.refpath[self.i][2]), "label": self.key, 'ID': self.key}
 
         return edgedata
 

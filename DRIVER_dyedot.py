@@ -164,3 +164,4 @@ graph.save(filename=str(args.o+'.dot'))
 #PRINT TIME TAKEN ~ 80s FOR TEST DATA
 end = time()
 print(end - start)
+

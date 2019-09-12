@@ -1,12 +1,3 @@
-nodedata = {}
-for i in range(1, len(refpath) - 1):  # Has to start at one, else loopback in graph
-    nw = (int(refpath[i + 1][1]) - int(refpath[i][1])) / 10
-    if nw < 1.2:
-        nw = 1.2
-
-    nodedata[str(refpath[i - 1][1] + refpath[i - 1][2])] = ["label", str(refpath[i - 1][0] + ' ' + refpath[i - 1][1] + ' ' + refpath[i - 1][2]), "width", str(nw)]
-    #p.edge(self.refpath[i - 1][1] + self.refpath[i - 1][2], self.refpath[i][1] + self.refpath[i][2])
-
 
 ## quick run start
 from os import name
@@ -16,6 +7,7 @@ import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
 from class_Utils import DataUtils
+import math
 
 outDir = os.getcwd() + "/DyeDotOutput"
 try:
@@ -64,7 +56,7 @@ REFy = math.ceil((len(objsToWrite['allvarnode'].keys()) + 1) / 2)
 refKeys = list(refnodedata.keys())
 for i in range(0,len(refKeys)):
     refnodedata[refKeys[i]]['y'] = REFy
-    refnodedata[refKeys[i]]['x'] = refnodedata[refKeys[i]]['label'].split()[1]
+    refnodedata[refKeys[i]]['x'] = int(refnodedata[refKeys[i]]['label'].split()[1])
 
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
@@ -82,77 +74,82 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
 
 ### custom
-#edge_xc = []
-#edge_xc = [1,2,None,2,3,None,1,3,None]
-#edge_yc = []
-#edge_yc = [1,2,None,2,1,None,1,1,None]
-
-#edge_xcy = []
-#edge_xcy = [1,2,None]
-#edge_ycy = []
-#edge_ycy = [1,2,None]
 
 ##############################done
-##node_xc = []
-##node_xc = [1,2,3]
-##node_yc = []
-##node_yc = [1,2,1]
-
-
-fig = go.Figure()
-
-# Add scatter trace for line
-fig.add_trace(go.Scatter(
-    x=edge_xcy, y=edge_ycy,
-    line=dict(width=2, color='#200'),
-    hoverinfo='none',
-    mode='lines'))
-fig.add_trace(go.Scatter(
-    x=edge_xc, y=edge_yc,
-    line=dict(width=0.5, color='#888'),
-    hoverinfo='none',
-    mode='lines'))
-fig.add_trace(go.Scatter(
-    x=node_xc, y=node_yc,
-    mode='markers',
-    hoverinfo='text',
-    marker=dict(
-        showscale=True,
-        # colorscale options
-        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
-        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
-        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
-        colorscale='YlGnBu',
-        reversescale=True,
-        color=[],
-        size=10,
-        colorbar=dict(
-            thickness=15,
-            title='Node Connections',
-            xanchor='left',
-            titleside='right'
-        ),
-        line_width=2)))
-
-fig.layout.update(
-    shapes=[
-        # 1st highlight during Feb 4 - Feb 6
-        go.layout.Shape(
-            type="rect",
-            # x-reference is assigned to the x-values
-            xref="x",
-            # y-reference is assigned to the plot paper [0,1]
-            yref="paper",
-            x0=0.75,
-            y0=0.75,
-            x1=1.25,
-            y1=1.25,
-            fillcolor="LightSalmon",
-            opacity=0.5,
-            layer="below",
-            line_width=0,
-        ),
-    ]
+layout = go.Layout(
+    yaxis=dict(
+        range=[-0.5, 3.5],
+        nticks=3
+    ),
+    xaxis=dict(
+        range=[0, 50],
+        nticks=200000000
+    )
 )
 
-plot(fig)
+
+fig = go.Figure(layout=layout)
+#fig.update_yaxes(nticks=3)
+#fig.update_xaxes(nticks=2000000000)
+
+fig.update_yaxes(tick0=2, dtick=0.5)
+fig.update_xaxes(tick0=0, dtick=0.5)
+
+
+
+#### refernence
+xlabs = [refnodedata[_]['label'] for _ in refnodedata.keys()]
+fig.add_trace(go.Scattergl(
+    x=edge_xc, y=edge_yc,
+    line=dict(width=0.5, color='#888'),
+    #hoverinfo='none',
+    hoverinfo=['all'],
+    mode='lines',
+    name='REFERENCE',
+    text=xlabs
+    ))
+
+fig.add_trace(go.Scattergl(
+    x=node_xc, y=node_yc,
+    mode='markers',
+    hoverinfo='all',
+    #hoverinfo='none',
+    #marker=dict(size=10,line=dict(width=2,color='DarkSlateGrey'), symbol = 'square'),
+marker=dict(size=10,line=dict(width=2,color='DarkSlateGrey')),
+    line_width=2,
+    text=xlabs,
+    name='REFERENCE'
+    ))
+#####
+
+xlabs = [allvarnode['yi38small'][_]['label'] for _ in allvarnode['yi38small'].keys()]
+fig.add_trace(go.Scattergl(
+    x=uedges_x, y=uedges_y,
+    line=dict(width=2, color='red'),
+    hoverinfo='all',
+    mode='lines',
+    name='YI38',
+    text=xlabs
+    ))
+
+fig.add_trace(go.Scattergl(
+    x=node_xcv, y=node_ycv,
+    mode='markers',
+    hoverinfo='all',
+    #hoverinfo='none',
+    #marker=dict(size=10,line=dict(width=2,color='blue'), symbol = 'square'),
+marker=dict(size=10,line=dict(width=2,color='blue')),
+    line_width=2,
+    text=xlabs,
+    name='YI38'
+    ))
+
+fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')))
+
+# manual plotting of boxes
+#fig.layout.update(shapes=nodeShapes)
+
+# comment out to allow CI pass
+# plot(fig, filename= str(outDir + '/' + 'DyeDot_int_output.html'))
+# Save locally
+fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
