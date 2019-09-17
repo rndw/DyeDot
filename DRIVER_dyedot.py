@@ -54,6 +54,7 @@ import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
 from class_Utils import DataUtils
+from class_PlotIG import PrepPlotData
 #from class_RawBuilder import RawData
 
 
@@ -160,6 +161,12 @@ graph.save(filename=str(args.o+'.dot'))
 # MANUAL PLOTTING
 # COORDINATES
 
+node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).RefPrepIGData()
+
+
+for key in list(allvarnode.keys()):
+    node_xcv, node_ycv, edge_xcv, edge_ycv = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).VarPrepIGData(key, VARyl)
+    VARyl.remove(VARyl[0])
 
 #PRINT TIME TAKEN ~ 80s FOR TEST DATA
 end = time()

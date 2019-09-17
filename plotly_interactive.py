@@ -51,14 +51,15 @@ node_xcv = []
 node_ycv = []
 for i in range(0,len(varNodeKeys)):
     if 'REF' in allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[2]:
-        allvarnode['yi38small'][varNodeKeys[i]]['y'] = int(REFy)
-        node_ycv.append(REFy)
+        #allvarnode['yi38small'][varNodeKeys[i]]['y'] = int(REFy)
+        #node_ycv.append(REFy)
+        continue
     else:
         allvarnode['yi38small'][varNodeKeys[i]]['y'] = int(VARy)
         node_ycv.append(int(VARy))
+        node_xcv.append(int(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1]))
 
     allvarnode['yi38small'][varNodeKeys[i]]['x'] = int(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1])
-    node_xcv.append(int(allvarnode['yi38small'][varNodeKeys[i]]['label'].split()[1]))
 
 # add edges
 # create dict index
@@ -77,35 +78,35 @@ for i in range(0,len(varNodeKeys) - 1):
     edge_ycv.append(None)
 
 # only add non-reference nodes
-varNodeKeysUniq = []
-node_xcvu = []
-node_ycvu = []
-for i in range(0,len(varNodeKeys)):
-    if not 'REF' in varNodeKeys[i]:
-        varNodeKeysUniq.append(varNodeKeys[i])
-        node_xcvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['x']))
-        node_ycvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['y']))
+#varNodeKeysUniq = []
+#node_xcvu = []
+#node_ycvu = []
+#for i in range(0,len(varNodeKeys)):
+#    if not 'REF' in varNodeKeys[i]:
+#        varNodeKeysUniq.append(varNodeKeys[i])
+#        node_xcvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['x']))
+#        node_ycvu.append(int(allvarnode['yi38small'][varNodeKeys[i]]['y']))
 
 ## unique edges
-uedges_x = []
-uedges_y = []
-for i in node_xcvu:
-    print(i)
-    uedges_x.append((int(i) -1))
-    uedges_x.append(int(i))
-    uedges_x.append(None)
+#uedges_x = []
+#uedges_y = []
+#for i in node_xcvu:
+#    print(i)
+#    uedges_x.append((int(i) -1))
+#    uedges_x.append(int(i))
+#    uedges_x.append(None)
 
-    uedges_y.append(REFy)
-    uedges_y.append(VARy)
-    uedges_y.append(None)
+#    uedges_y.append(REFy)
+#    uedges_y.append(VARy)
+#    uedges_y.append(None)
 
-    uedges_x.append(int(i))
-    uedges_x.append((int(i) + 1))
-    uedges_x.append(None)
+#    uedges_x.append(int(i))
+#    uedges_x.append((int(i) + 1))
+#    uedges_x.append(None)
 
-    uedges_y.append(VARy)
-    uedges_y.append(REFy)
-    uedges_y.append(None)
+#    uedges_y.append(VARy)
+#    uedges_y.append(REFy)
+#    uedges_y.append(None)
 
 
 ######################### mf1

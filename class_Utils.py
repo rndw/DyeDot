@@ -30,7 +30,8 @@ class DataUtils:
         for item in self.objsToWrite.keys():
             # print(idx, item)
             with open(self.outDir + item + '_DDbackup.txt', 'w') as f:
-                f.write(str(objsToWrite[item]))  # can only write strings, not dictionaries
+                f.writelines(str(objsToWrite[item]))  # can only write strings, not dictionaries
+                #f.writelines('{}:{}\n'.format(k, v) for k, v in self.objsToWrite[item].items())
 
         with open(self.outDir + 'DDbackup.pickle', 'wb') as file:
             pickle.dump(self.objsToWrite, file)

@@ -8,6 +8,8 @@ from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
 from class_Utils import DataUtils
 import math
+from class_PlotIG import PrepPlotData
+
 
 outDir = os.getcwd() + "/DyeDotOutput"
 try:
@@ -45,6 +47,11 @@ objsToWrite = {'refnodedata': refnodedata, 'refedgedata': refedgedata, 'varnoded
                'varedgedata': varedgedata, 'allvarnode': allvarnode, 'allvaredge': allvaredge}
 graphObjs = {'graph': graph, 'xgraph': xgraph}
 DataUtils().resumeBck(objsToWrite=objsToWrite, graphObjs=graphObjs, outDir=outDir)
+
+#### test writing
+    with open('yi38_nodes.txt', 'w') as f:
+        # f.writelines(str(objsToWrite[item]))  # can only write strings, not dictionaries
+        f.writelines('{}:{}\n'.format(k, v) for k, v in allvarnode['yi38small'].items())
 
 #newobjstowrite = dataUtils().resumeFromBck(bckPath=outDir)
 
@@ -124,7 +131,7 @@ marker=dict(size=10,line=dict(width=2,color='DarkSlateGrey')),
 
 xlabs = [allvarnode['yi38small'][_]['label'] for _ in allvarnode['yi38small'].keys()]
 fig.add_trace(go.Scattergl(
-    x=uedges_x, y=uedges_y,
+    x=edge_xcv, y=edge_ycv,
     line=dict(width=2, color='red'),
     hoverinfo='all',
     mode='lines',
