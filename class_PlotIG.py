@@ -1,4 +1,8 @@
 import math
+import matplotlib.pyplot as plt
+import plotly.graph_objs as go
+import plotly.plotly as py
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
 class PrepPlotData:
 
@@ -41,8 +45,12 @@ class PrepPlotData:
 
     def VarPrepIGData(self, key, VARyl):
         self.key = key
-
-        self.VARy = self.VARyl[0] + 0.99
+        self.VARyl = VARyl
+        #if self.VARyl[0] < self.REFy:
+        #    self.VARy = self.REFy - (self.REFy - self.VARyl[0]) * 0.01
+        VARy = self.VARyl[0] + 0.99
+        #if self.VARyl[0] > self.REFy:
+        #    self.VARy = self.REFy + (self.REFy - self.VARyl[0]) * 0.01
         # Need to build index for dictionary
         varNodeKeys = list(self.allvarnode[self.key])
 
@@ -52,8 +60,8 @@ class PrepPlotData:
             if 'REF' in self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[2]:
                 self.allvarnode[self.key][varNodeKeys[i]]['y'] = int(self.REFy)
             else:
-                self.allvarnode[self.key][varNodeKeys[i]]['y'] = int(self.VARy)
-                node_ycv.append(int(self.VARy))
+                self.allvarnode[self.key][varNodeKeys[i]]['y'] = int(VARy)
+                node_ycv.append(int(VARy))
                 node_xcv.append(int(self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[1]))
 
             self.allvarnode[self.key][varNodeKeys[i]]['x'] = int(self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[1])
@@ -74,3 +82,67 @@ class PrepPlotData:
             edge_ycv.append(None)
 
         return node_xcv, node_ycv, edge_xcv, edge_ycv
+
+class PPlot:
+    def __init__(self, node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig):
+        self.node_xc = node_xc
+        self.node_yc = node_yc
+        self.allvarnode = allvarnode
+        self.edge_xc = edge_xc
+        self.edge_yc = edge_yc
+        self.refnodedata = refnodedata
+        self.fig = fig
+
+    def RefBase(self):
+
+        xlabs = [self.refnodedata[_]['label'] for _ in self.refnodedata.keys()]
+        self.fig.add_trace(go.Scattergl(
+            x=self.edge_xc, y=self.edge_yc,
+            line=dict(width=0.5, color='#888'),
+            # hoverinfo='none',
+            hoverinfo=['all'],
+            mode='lines',
+            name='REFERENCE',
+            text=xlabs
+        ))
+
+        self.fig.add_trace(go.Scattergl(
+            x=self.node_xc, y=self.node_yc,
+            mode='markers',
+            hoverinfo='all',
+            # hoverinfo='none',
+            marker=dict(size=12, line=dict(width=2, color='DarkSlateGrey')),
+            line_width=2,
+            text=xlabs,
+            name='REFERENCE'
+        ))
+
+        return self.fig
+
+    def VarG(self,xlabs, key):
+        self.xlabs = xlabs
+        self.key = key
+
+        self.fig.add_trace(go.Scattergl(
+            x=self.edge_xc, y=self.edge_yc,
+            line=dict(width=2, color='red'),
+            hoverinfo='all',
+            mode='lines',
+            name=self.key,
+            text=self.xlabs
+        ))
+
+        self.fig.add_trace(go.Scattergl(
+            x=self.node_xc, y=self.node_yc,
+            mode='markers',
+            hoverinfo='all',
+            # hoverinfo='none',
+            # marker=dict(size=10,line=dict(width=2,color='blue'), symbol = 'square'),
+            marker=dict(size=10, line=dict(width=2, color='blue')),
+            line_width=2,
+            text=self.xlabs,
+            name=self.key
+        ))
+
+
+        return self.fig

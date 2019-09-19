@@ -54,7 +54,7 @@ import argparse
 from class_vcf_parser import ReadVcfs, VarGraphCons, RegionOfInterestGraph
 from class_Grapher import RefGraphBuilder
 from class_Utils import DataUtils
-from class_PlotIG import PrepPlotData
+from class_PlotIG import PrepPlotData, PPlot
 #from class_RawBuilder import RawData
 
 
@@ -160,13 +160,31 @@ graph.save(filename=str(args.o+'.dot'))
 
 # MANUAL PLOTTING
 # COORDINATES
-
+from class_PlotIG import PrepPlotData, PPlot
 node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).RefPrepIGData()
 
+import plotly.graph_objs as go
+
+layout = go.Layout(yaxis=dict(range=[-0.5, 3.5]), xaxis=dict(range=[0, 500]))
+fig = go.Figure(layout=layout)
+
+fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).RefBase()
+
+## Vargraphs
+##testing
+
+key = 'yi38small'
 
 for key in list(allvarnode.keys()):
-    node_xcv, node_ycv, edge_xcv, edge_ycv = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).VarPrepIGData(key, VARyl)
+    node_xc, node_yc, edge_xc, edge_yc = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARyl)
     VARyl.remove(VARyl[0])
+    xlabs = [allvarnode[key][_]['label'] for _ in allvarnode[key].keys()]
+    fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).VarG(xlabs, key)
+
+
+
+fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')))
+fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
 
 #PRINT TIME TAKEN ~ 80s FOR TEST DATA
 end = time()

@@ -38,8 +38,7 @@ refpath = RegionOfInterestGraph(output, loci).referencegr()
 graph, refnodedata, refedgedata = RefGraphBuilder(refpath=refpath).referencepath()
 
 # CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
-xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output, graph,
-                                                                                                        loci, refpath)
+xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output, graph,loci, refpath)
 
 # Write objects to disk to resume
 # This would work better as a dictionary - why did I make it a list? - DONE
