@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 #import plotly.plotly as py
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import random
 
 class PrepPlotData:
 
@@ -107,7 +108,7 @@ class PPlot:
         xlabs = [self.refnodedata[_]['label'] for _ in self.refnodedata.keys()]
         self.fig.add_trace(go.Scattergl(
             x=self.edge_xc, y=self.edge_yc,
-            line=dict(width=0.5, color='#888'),
+            line=dict(width=0.5, color='grey'),
             # hoverinfo='none',
             hoverinfo=['all'],
             mode='lines',
@@ -120,8 +121,8 @@ class PPlot:
             mode='markers',
             hoverinfo='all',
             # hoverinfo='none',
-            marker=dict(size=12, line=dict(width=2, color='DarkSlateGrey')),
-            line_width=2,
+            marker=dict(size=6, line=dict(width=1, color='DarkSlateGrey'), color='grey'),
+            line_width=1,
             text=xlabs,
             name='REFERENCE'
         ))
@@ -131,24 +132,26 @@ class PPlot:
     def VarG(self,xlabs, key):
         self.xlabs = xlabs
         self.key = key
+        colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
 
         self.fig.add_trace(go.Scattergl(
             x=self.edge_xc, y=self.edge_yc,
-            line=dict(width=2, color='red'),
+            line=dict(width=0.5, color=colhexcode),
             hoverinfo='all',
             mode='lines',
             name=self.key,
             text=self.xlabs
         ))
 
+        colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
         self.fig.add_trace(go.Scattergl(
             x=self.node_xc, y=self.node_yc,
             mode='markers',
             hoverinfo='all',
             # hoverinfo='none',
             # marker=dict(size=10,line=dict(width=2,color='blue'), symbol = 'square'),
-            marker=dict(size=10, line=dict(width=2, color='blue')),
-            line_width=2,
+            marker=dict(size=10, line=dict(width=1, color=colhexcode)),
+            line_width=1,
             text=self.xlabs,
             name=self.key
         ))

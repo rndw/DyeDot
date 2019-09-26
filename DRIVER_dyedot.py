@@ -161,12 +161,13 @@ graph.save(filename=str(args.o+'.dot'))
 # MANUAL PLOTTING
 # COORDINATES
 from class_PlotIG import PrepPlotData, PPlot
-
+scaleYmin = (len(allvarnode.keys())/2) - 2
+scaleYmax = (len(allvarnode.keys())/2) + 2
 node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).RefPrepIGData()
 
 import plotly.graph_objs as go
 
-layout = go.Layout(yaxis=dict(range=[-0.5, 3.5]), xaxis=dict(range=[0, 500]))
+layout = go.Layout(yaxis=dict(range=[scaleYmin, scaleYmax]), xaxis=dict(range=[0, 500]))
 fig = go.Figure(layout=layout)
 
 fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).RefBase()
