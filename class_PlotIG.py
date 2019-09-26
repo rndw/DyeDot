@@ -106,7 +106,7 @@ class PPlot:
     def RefBase(self):
 
         xlabs = [self.refnodedata[_]['label'] for _ in self.refnodedata.keys()]
-        self.fig.add_trace(go.Scattergl(
+        self.fig.add_trace(go.Scatter(
             x=self.edge_xc, y=self.edge_yc,
             line=dict(width=0.5, color='grey'),
             # hoverinfo='none',
@@ -116,7 +116,7 @@ class PPlot:
             text=xlabs
         ))
 
-        self.fig.add_trace(go.Scattergl(
+        self.fig.add_trace(go.Scatter(
             x=self.node_xc, y=self.node_yc,
             mode='markers',
             hoverinfo='all',
@@ -135,7 +135,7 @@ class PPlot:
         # Thanks to the internet for the gem below! eternal, shiny and chrome
         colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
 
-        self.fig.add_trace(go.Scattergl(
+        self.fig.add_trace(go.Scatter(
             x=self.edge_xc, y=self.edge_yc,
             line=dict(width=0.5, color=colhexcode),
             hoverinfo='all',
@@ -145,7 +145,7 @@ class PPlot:
         ))
 
         colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
-        self.fig.add_trace(go.Scattergl(
+        self.fig.add_trace(go.Scatter(
             x=self.node_xc, y=self.node_yc,
             mode='markers',
             hoverinfo='all',

@@ -1,7 +1,8 @@
 from random import randint
 from graphviz import Digraph
-import seaborn as sns
+#import seaborn as sns
 # from seaborn import color_palette
+import random
 from class_RawBuilder import RawData
 
 
@@ -77,15 +78,17 @@ class RefGraphBuilder:
         self.loci = loci
         self.refpath = refpath
 
-        colour = sns.color_palette("colorblind", desat=.5) + sns.color_palette("Set1", n_colors=8, desat=.5)
-        del colour[7:9]
-        colour = sns.color_palette(colour)
-        colour = colour.as_hex()
-        graphcol = colour[randint(0, len(colour) - 1)]
-        graphcolfill = colour[randint(0, len(colour) - 1)]
-
-        graphcoledge = colour[randint(0, len(colour) - 1)]
-
+        #colour = sns.color_palette("colorblind", desat=.5) + sns.color_palette("Set1", n_colors=8, desat=.5)
+        colour = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+        #del colour[7:9]
+        #colour = sns.color_palette(colour)
+        #colour = colour.as_hex()
+        #graphcol = colour[randint(0, len(colour) - 1)]
+        graphcol = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+        #graphcolfill = colour[randint(0, len(colour) - 1)]
+        graphcolfill = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+        #graphcoledge = colour[randint(0, len(colour) - 1)]
+        graphcoledge = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
         # newvar
         allvar = {}
         allvaredge = {}

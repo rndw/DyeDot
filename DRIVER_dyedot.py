@@ -196,7 +196,7 @@ for key in list(allvarnode.keys()):
 
 
 
-fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')))
+fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')), xaxis_rangeslider_visible=True)
 fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
 
 #PRINT TIME TAKEN ~ 80s FOR TEST DATA

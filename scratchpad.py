@@ -159,3 +159,32 @@ fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), x
 # plot(fig, filename= str(outDir + '/' + 'DyeDot_int_output.html'))
 # Save locally
 fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
+
+
+#### y slider mode
+from class_PlotIG import PrepPlotData, PPlot
+scaleYmin = (len(allvarnode.keys())/2) - 2
+scaleYmax = (len(allvarnode.keys())/2) + 2
+node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).RefPrepIGData()
+
+import plotly.graph_objs as go
+
+layout = go.Layout(yaxis=dict(range=[scaleYmin, scaleYmax]), xaxis=dict(range=[0, 500]))
+fig = go.Figure(layout=layout)
+
+#from ipywidgets import interactive, HBox, VBox, widgets, interact
+
+fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).RefBase()
+
+
+for key in list(allvarnode.keys()):
+    VARy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).yScaler(VARyl)
+    node_xc, node_yc, edge_xc, edge_yc = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARy)
+    VARyl.remove(VARyl[0])
+    xlabs = [allvarnode[key][_]['label'] for _ in allvarnode[key].keys()]
+    fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).VarG(xlabs, key)
+
+
+
+fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')), xaxis_rangeslider_visible=True)
+fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
