@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
-import plotly.plotly as py
+#import plotly.plotly as py
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
 class PrepPlotData:
@@ -17,7 +17,7 @@ class PrepPlotData:
         self.refEdgeKeys = list(self.refedgedata.keys())
 
         self.VARyl = list(range(1, len(self.allvarnode.keys()) + 2))
-        self.VARyl.pop(self.REFy)
+        self.VARyl.pop(self.VARyl.index(self.REFy))
 
     def RefPrepIGData(self):
         node_xc = []
@@ -43,14 +43,23 @@ class PrepPlotData:
 
         return node_xc, node_yc, edge_xc, edge_yc, self.VARyl, self.REFy
 
-    def VarPrepIGData(self, key, VARyl):
-        self.key = key
+    def yScaler(self, VARyl):
         self.VARyl = VARyl
-        #if self.VARyl[0] < self.REFy:
-        #    self.VARy = self.REFy - (self.REFy - self.VARyl[0]) * 0.01
-        VARy = self.VARyl[0] + 0.99
-        #if self.VARyl[0] > self.REFy:
-        #    self.VARy = self.REFy + (self.REFy - self.VARyl[0]) * 0.01
+        ## Dange DANGER - GLOBAL variable
+        #global VARy = ""
+        VARy = 0
+        if self.VARyl[0] < self.REFy:
+           VARy = self.REFy - float(self.REFy - self.VARyl[0]) * 0.1
+        #VARy = self.VARyl[0] + 0.99
+        if self.VARyl[0] > self.REFy:
+           VARy = self.REFy - float(self.REFy - self.VARyl[0]) * 0.1
+
+        return VARy
+
+    def VarPrepIGData(self, key, VARy):
+        self.key = key
+        self.VARy = VARy
+
         # Need to build index for dictionary
         varNodeKeys = list(self.allvarnode[self.key])
 
@@ -60,8 +69,8 @@ class PrepPlotData:
             if 'REF' in self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[2]:
                 self.allvarnode[self.key][varNodeKeys[i]]['y'] = int(self.REFy)
             else:
-                self.allvarnode[self.key][varNodeKeys[i]]['y'] = int(VARy)
-                node_ycv.append(int(VARy))
+                self.allvarnode[self.key][varNodeKeys[i]]['y'] = float(VARy)
+                node_ycv.append(float(VARy))
                 node_xcv.append(int(self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[1]))
 
             self.allvarnode[self.key][varNodeKeys[i]]['x'] = int(self.allvarnode[self.key][varNodeKeys[i]]['label'].split()[1])
@@ -75,9 +84,9 @@ class PrepPlotData:
 
         for i in range(0, len(varNodeKeys) - 1):
             edge_xcv.append(int(self.allvarnode[self.key][varNodeKeys[i]]['x']))
-            edge_ycv.append(int(self.allvarnode[self.key][varNodeKeys[i]]['y']))
+            edge_ycv.append(float(self.allvarnode[self.key][varNodeKeys[i]]['y']))
             edge_xcv.append(int(self.allvarnode[self.key][varNodeKeys[i + 1]]['x']))
-            edge_ycv.append(int(self.allvarnode[self.key][varNodeKeys[i + 1]]['y']))
+            edge_ycv.append(float(self.allvarnode[self.key][varNodeKeys[i + 1]]['y']))
             edge_xcv.append(None)
             edge_ycv.append(None)
 

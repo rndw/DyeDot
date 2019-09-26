@@ -66,7 +66,7 @@ for i in range(0,len(refKeys)):
 
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
-import plotly.plotly as py
+#import plotly.plotly as py
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
 #node_adjacencies = []

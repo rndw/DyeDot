@@ -161,6 +161,7 @@ graph.save(filename=str(args.o+'.dot'))
 # MANUAL PLOTTING
 # COORDINATES
 from class_PlotIG import PrepPlotData, PPlot
+
 node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).RefPrepIGData()
 
 import plotly.graph_objs as go
@@ -172,11 +173,22 @@ fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).Re
 
 ## Vargraphs
 ##testing
+# keys are ['mf1small', 'j11small', 'yi38small']
+#key = 'yi38small'
+#VARy = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).yScaler(VARyl)
+#node_xc, node_yc, edge_xc, edge_yc = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARy)
+#VARyl.remove(VARyl[0])
+#xlabs = [allvarnode[key][_]['label'] for _ in allvarnode[key].keys()]
+#fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).VarG(xlabs, key)
+#fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')))
+#fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
+##testing
 
-key = 'yi38small'
+
 
 for key in list(allvarnode.keys()):
-    node_xc, node_yc, edge_xc, edge_yc = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARyl)
+    VARy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).yScaler(VARyl)
+    node_xc, node_yc, edge_xc, edge_yc = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARy)
     VARyl.remove(VARyl[0])
     xlabs = [allvarnode[key][_]['label'] for _ in allvarnode[key].keys()]
     fig = PPlot(node_xc, node_yc, edge_xc, edge_yc, allvarnode, refnodedata, fig).VarG(xlabs, key)
