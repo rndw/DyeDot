@@ -8,8 +8,9 @@
 
 # Current focus:
 [ ] Add XML output for Cytoscape  
-[ ] Expose data structures to other functions  
-[ ] Manual plotting - Interactive plotting  
+[x] Expose data structures to other functions  
+[x] Manual plotting - Interactive plotting  
+*  [ ] Improve interactive display - Dash
 
 # DyeDot: Variation graphs from VCF
 
@@ -42,11 +43,12 @@ Extract the archive containing several yeast vcf files in the VCFs dir. After ex
 
 ## Install python dependencies:
 
-`pip3 install seaborn`
+`pip3 install --upgrade pip`
 
-`pip3 install graphviz`
+`pip3 install -r requirements.txt`
 
 ## Viewing dot files locally:
+**OPTIONAL**
 `apt-get install kgraphviewer kgraphviewer-dev`
 
 kgraphviewer displays multiple edges incorrectly. The default is to merge edges, which, defeats the purpose of graphs.
@@ -63,6 +65,18 @@ Example command:
 If you need help:
 
 `python3 DRIVER_dyedot.py -h`
+
+### Quickly view output from included example data
+`python3 DRIVER_dyedot.py -p VCF/ -o ./Test/test`  
+or  
+`python3 DRIVER_dyedot.py`  
+or  
+`python3 DRIVER_dyedot.py -r True`  
+
+### Repeat run on previous data
+DyeDot will use backup and intermediate files from previous runs if available. Just supply the `-r` argument.  
+
+`python3 DRIVER_dyedot.py -r True`
 
 ## Notes
 Instructions on how to convert a multi-sample vcf file is included in the ./VCFs/readme. A URL with additional vcf files is supplied for download.

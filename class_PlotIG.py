@@ -132,6 +132,7 @@ class PPlot:
     def VarG(self,xlabs, key):
         self.xlabs = xlabs
         self.key = key
+        # Thanks to the internet for the gem below! eternal, shiny and chrome
         colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
 
         self.fig.add_trace(go.Scattergl(
