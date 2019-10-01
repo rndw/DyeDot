@@ -85,3 +85,7 @@ DyeDot was only tested on SNP data from yeast as an example. Testing on human da
 
 ## Interactive visualisation
 Convert the graphviz (.dot or .gv) output to .gml format with `dot graph.gv | gv2gml > graph.gml` **OR** `gv2gml graph.dot -o graph.gml` and visualise with `Cytoscape 3.0+` via import.
+
+### View pre-generated output
+[plotly interactive figure](DyeDot_LARGESNP_SLIDER.html)   
+[plotly static output](dyedot-dotler.png)
