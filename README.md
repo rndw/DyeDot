@@ -88,4 +88,4 @@ Convert the graphviz (.dot or .gv) output to .gml format with `dot graph.gv | gv
 
 ### View pre-generated output
 [plotly interactive figure](DyeDot_LARGESNP_SLIDER.html)   
-[plotly static output](dyedot-dotler.png)
+![plotly static output](dyedot-dotler.png)
