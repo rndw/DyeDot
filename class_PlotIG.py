@@ -1,3 +1,4 @@
+# clean up imports
 import math
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
