@@ -25,11 +25,21 @@ loci = ['chrVII', 0, 1050000]
 #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
 path = '/home/rndw/Github/DyeDot/VCF/'
 #path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
+#path = '/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
+## Have a look at scikit-allel
+#import scikit-allel
 output = VarGraphCons().anchor_builder(dat, path)
 # LIMIT DATA TO SPECIFIED REGION
 # IMPROVEMENT: OUTPUT MULTIPLE RANGES OR BLOCKS
+
+import pickle
+pickle_data = [loci, path, dat, output]
+pickle.dump(pickle_data, open( "test_bck.pkl", "wb" ))
+
+loci, path, dat, output = pickle.load(open("test_bck.pkl", "rb"))
+
 RegionOfInterestGraph(output, loci).region()
 # CONSTRUCT A REFERENCE PATH OBJECT. THIS COULD BE ANYTHING REALLY (HAPLOTYPES) - AS LONG AS IT CONTAINS OVERLAPPING NODES
 refpath = RegionOfInterestGraph(output, loci).referencegr()
@@ -188,3 +198,7 @@ for key in list(allvarnode.keys()):
 
 fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')), xaxis_rangeslider_visible=True)
 fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
+
+
+
+## tkinter

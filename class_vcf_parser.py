@@ -30,6 +30,10 @@ class ReadVcfs:
             print(f'Adding variants from: {filename}\n')
             vcfdata[sample] = VariantList(self.path, filename, sample)
         return vcfdata
+    def sci_variant_bldr(self):
+        import allel
+        if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) > 1:
+            print("Multiple VCFs detected. Files will be merged")
 
 
 class VariantList:
