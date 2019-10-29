@@ -20,10 +20,10 @@ except FileExistsError:
 finally:
     print(f"Output directory: {outDir}")
 
-#loci = ['chrI',0,50000]
-loci = ['chrVII', 0, 1050000]
+loci = ['chrI',0,50000]
+loci = ['chrI', 0, 1050000]
 #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
-path = '/home/rndw/Github/DyeDot/VCF/'
+path = '/home/rndw/Github/DyeDot/VCF/genome_multi/'
 #path = '/mnt/Data/PD/Workspace/Testing/VCFs/'
 dat = ReadVcfs(path).variant_builder()
 
@@ -66,42 +66,12 @@ for i in range(0,len(refKeys)):
 
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
-#import plotly.plotly as py
+import plotly
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
-#node_adjacencies = []
-#node_text = []
-#for node, adjacencies in enumerate(g.adjacency()):
-#    node_adjacencies.append(len(adjacencies[1]))
-#    node_text.append('# of connections: '+str(len(adjacencies[1])))
 
-#node_trace.marker.color = node_adjacencies
-#node_trace.text = node_text
-
-
-### custom
 
 ##############################done
-layout = go.Layout(
-    yaxis=dict(
-        range=[-0.5, 3.5],
-        nticks=3
-    ),
-    xaxis=dict(
-        range=[0, 50],
-        nticks=200000000
-    )
-)
-
-
-fig = go.Figure(layout=layout)
-#fig.update_yaxes(nticks=3)
-#fig.update_xaxes(nticks=2000000000)
-
-fig.update_yaxes(tick0=2, dtick=0.5)
-fig.update_xaxes(tick0=0, dtick=0.5)
-
-
 
 #### refernence
 xlabs = [refnodedata[_]['label'] for _ in refnodedata.keys()]
@@ -188,3 +158,111 @@ for key in list(allvarnode.keys()):
 
 fig.layout.update(title=go.layout.Title(text='Chromosome', xref='paper', x=0), xaxis=go.layout.XAxis(title=go.layout.xaxis.Title(text='Coordinates')), xaxis_rangeslider_visible=True)
 fig.write_html(str(outDir + '/' + 'DyeDot_int_output.html'))
+
+
+
+
+
+
+### GLOBAL GENOME plot############################################
+from class_PlotIG import PrepPlotData, PPlot
+import plotly.graph_objs as go
+
+# y position
+REFy = math.ceil((len(objsToWrite['allvarnode'].keys()) + 1) / 2)
+# Need to build index for dictionary
+refKeys = list(refnodedata.keys())
+for i in range(0,len(refKeys)):
+    refnodedata[refKeys[i]]['y'] = REFy
+    refnodedata[refKeys[i]]['x'] = int(refnodedata[refKeys[i]]['label'].split()[1])
+
+import matplotlib.pyplot as plt
+import plotly.graph_objs as go
+import plotly
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+
+
+
+#chroms = ['chrI','chrII','chrIII','chrIV','chrV','chrVI','chrVII','chrVIII','chrIX','chrX','chrXI','chrXII','chrXIII','chrXIV','chrXV','chrXVI','chrM']
+chroms = ['chrI','chrII','chrIII']
+fig = plotly.tools.make_subplots(rows=3,cols=1)
+
+for i in chroms:
+    loci = [i, 0, 12000000]
+    dat = ReadVcfs(path).variant_builder()
+
+    output = VarGraphCons().anchor_builder(dat, path)
+    RegionOfInterestGraph(output, loci).region()
+    refpath = RegionOfInterestGraph(output, loci).referencegr()
+    graph, refnodedata, refedgedata = RefGraphBuilder(refpath=refpath).referencepath()
+    xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output,graph, loci,refpath)
+
+    node_xc, node_yc, edge_xc, edge_yc, VARyl, REFy = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).RefPrepIGData()
+
+    xlabs = [refnodedata[_]['label'] for _ in refnodedata.keys()]
+    trace1 = go.Scattergl(
+        x=edge_xc, y=edge_yc,
+        line=dict(width=0.5, color='#888'),
+        #hoverinfo='none',
+        hoverinfo=['all'],
+        mode='lines',
+        name='REFERENCE',
+        text=xlabs
+        )
+
+    trace2 = go.Scattergl(
+        x=node_xc, y=node_yc,
+        mode='markers',
+        hoverinfo='all',
+        #hoverinfo='none',
+        #marker=dict(size=10,line=dict(width=2,color='DarkSlateGrey'), symbol = 'square'),
+    marker=dict(size=10,line=dict(width=2,color='DarkSlateGrey')),
+        line_width=2,
+        #text=xlabs,
+        name='REFERENCE'
+        )
+
+    key = 'YI38P'
+        VARy = PrepPlotData(refedgedata, refnodedata, allvarnode, allvaredge).yScaler(VARyl)
+        node_xcv, node_ycv, edge_xcv, edge_ycv = PrepPlotData(refedgedata, refnodedata, allvarnode,allvaredge).VarPrepIGData(key, VARy)
+        VARyl.remove(VARyl[0])
+        xlabs = [allvarnode[key][_]['label'] for _ in allvarnode[key].keys()]
+
+
+    trace3 = go.Scattergl(
+        x=edge_xcv, y=edge_ycv,
+        line=dict(width=2, color='red'),
+        hoverinfo='all',
+        mode='lines',
+        #name='YI38',
+        #text=xlabs
+    )
+
+    trace4 = go.Scattergl(
+        x=node_xcv, y=node_ycv,
+        mode='markers',
+        hoverinfo='all',
+        # hoverinfo='none',
+        # marker=dict(size=10,line=dict(width=2,color='blue'), symbol = 'square'),
+        marker=dict(size=10, line=dict(width=2, color='blue')),
+        line_width=2,
+        #text=xlabs,
+        #name='YI38'
+    )
+
+#####
+
+
+
+fig.append_trace(trace1,1,1)
+fig.append_trace(trace2,1,1)
+fig.append_trace(trace3,1,1)
+fig.append_trace(trace4,1,1)
+
+fig.append_trace(trace1,2,1)
+fig.append_trace(trace2,2,1)
+fig.append_trace(trace3,2,1)
+fig.append_trace(trace4,2,1)
+
+fig.write_html(str(outDir + '/' + 'DyeDot_int_output_testmulti.html'))
+

@@ -92,19 +92,21 @@ class VarGraphCons:
 
         graphdb = {}
 
-        for key in list(
-                dat.keys()):  # This function adds REFERENCE anchors - allowing merging back to reference positions
+        for key in list(dat.keys()):  # This function adds REFERENCE anchors - allowing merging back to reference positions
             data = dat[key].vcf_reader()
             # need to split into chromosomes to add anchors. Could pull chr lengths in from gff?
             chromosomes = list(set([_[0] for _ in data[2:]]))
+            try:
+                chromosomes.remove('\n')  # remove newlines if they slip in
+            except ValueError:
+                pass
+
             print('Finished')
             rebuild_genome = ()
             for i in chromosomes:
                 temp = [tuple(_, ) for _ in data[2:] if _[0] == i]  # split per chromosome - needed to add anchors
-                temp = (tuple([temp[0][0], str(int(temp[0][1]) - 1), ' ', 'REF'], ),) + tuple(
-                    temp)  # add chr start anchor
-                temp = tuple(temp) + (tuple(
-                    [temp[len(temp) - 1][0], str(int(temp[len(temp) - 1][1]) + 1), ' ', 'REF']),)  # add chr end anchor
+                temp = (tuple([temp[0][0], str(int(temp[0][1]) - 1), ' ', 'REF'], ),) + tuple(temp)  # add chr start anchor
+                temp = tuple(temp) + (tuple([temp[len(temp) - 1][0], str(int(temp[len(temp) - 1][1]) + 1), ' ', 'REF']),)  # add chr end anchor
                 anchors = ()
 
                 for k in range(1, len(temp) - 1):
