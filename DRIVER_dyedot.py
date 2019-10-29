@@ -105,6 +105,7 @@ if not args.r:
     #path = '/home/rndw/Github/RefGraph/Dyedot_variationGraphs/Small_vcfs/'
 
     #CREATE A DICTIONARY OBJECT LINKING EACH KEY TO A VCF
+    #Use scikit-allel to read in multivcf
     dat = ReadVcfs(path).variant_builder()
     #EXIT IF THE DIR CONTAINS NO VCFs
     if not dat:

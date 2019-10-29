@@ -32,8 +32,24 @@ class ReadVcfs:
         return vcfdata
     def sci_variant_bldr(self):
         import allel
+        import subprocess
         if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) > 1:
             print("Multiple VCFs detected. Files will be merged")
+            if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) < len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]):
+                print("VCFs not compressed - compressing")
+                # need to include path
+                #command = ""
+                #command = "ls " + path + "*.vcf"
+                subprocess.call(['ls', path])
+                #subprocess.Popen(command, shell=True)
+                command = "sh cd " + path + " && " + "'for file in *.vcf;do bgzip $file;done'"
+                subprocess.run("sh cd " + path + " && " + "'for file in *.vcf;do bgzip $file;done'")
+                subprocess.run(command, shell=True, check=True)
+
+                subprocess.run("sh -c 'for i in {1..3}; do echo ${i}; done'", shell=True, check=True)
+                subprocess.call(['for file in ', conparse, "; do bgzip $file; done"])
+                os.system('for file in ${MYPATH}*.vcf; do bgzip $file; done')
+            os.system()
 
 
 class VariantList:
