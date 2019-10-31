@@ -280,3 +280,17 @@ fig.write_html(str(outDir + '/' + 'DyeDot_int_output_testmulti.html'))
 =======
 ## tkinter
 >>>>>>> a9efb66e0ef21d052cb074fd1c981d6f362ed5dc
+
+
+#### scikit-allel
+import allel
+import subprocess
+import collections
+import pandas as pd
+import numpy as np
+
+vcfdata = allel.read_vcf("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf", fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
+vcfdf = allel.vcf_to_dataframe("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf", exclude_fields=['QUAL','FILTER_PASS', 'ID'])
+
+vcfdata.keys()
+set(vcfdata['variants/CHROM'])

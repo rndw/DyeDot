@@ -33,24 +33,29 @@ class ReadVcfs:
     def sci_variant_bldr(self):
         import allel
         import subprocess
+        import collections
         if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) > 1:
             print("Multiple VCFs detected. Files will be merged")
             if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) < len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]):
                 print("VCFs not compressed - compressing")
-                # need to include path
-                #command = ""
-                #command = "ls " + path + "*.vcf"
-                subprocess.call(['ls', path])
-                #subprocess.Popen(command, shell=True)
-                command = "sh cd " + path + " && " + "'for file in *.vcf;do bgzip $file;done'"
-                subprocess.run("sh cd " + path + " && " + "'for file in *.vcf;do bgzip $file;done'")
-                subprocess.run(command, shell=True, check=True)
+                for i in [_ for _ in os.listdir(self.path) if _.endswith('.vcf')]:
+                    #testing
+                    #i = [_ for _ in os.listdir(path) if _.endswith('.vcf')][0]
+                    vcf = path+i
+                    subprocess.run(['bgzip', "-c",vcf, ">"], stdout=open(vcf+".gz", "w"))
+                    # required?
+                    subprocess.run(['tabix', '-p', 'vcf', vcf+".vcf"])
+            command = 'bcftools merge --force-samples ' + path+"*.gz" + ' -o ' + path+'INPUT.vcf'
+            subprocess.run(command, shell=True)
+        vcfdata = allel.read_vcf(path+'INPUT.vcf', fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
+        #vcfdata = allel.read_vcf("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf")
+        vcfdf = allel.vcf_to_dataframe(path+'INPUT.vcf', exclude_fields=['QUAL','FILTER_PASS', 'ID'])
+        #vcfdf = allel.vcf_to_dataframe("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf")
+        sample_set = list(collections.OrderedDict.fromkeys(vcfdata['samples']))
+        gt = allel.GenotypeArray(vcfdata['calldata/GT']).to_n_alt() # drop additional information
+        gt_data = pd.DataFrame(gt, columns=sample_set)
 
-                subprocess.run("sh -c 'for i in {1..3}; do echo ${i}; done'", shell=True, check=True)
-                subprocess.call(['for file in ', conparse, "; do bgzip $file; done"])
-                os.system('for file in ${MYPATH}*.vcf; do bgzip $file; done')
-            os.system()
-
+        result = pd.concat([vcfdf, gt_data], axis=1, join='inner')
 
 class VariantList:
 
