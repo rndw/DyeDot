@@ -34,6 +34,8 @@ class ReadVcfs:
         import allel
         import subprocess
         import collections
+        import pandas as pd
+        import os
         if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) > 1:
             print("Multiple VCFs detected. Files will be merged")
             if len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]) < len([_ for _ in os.listdir(self.path) if _.endswith('.vcf')]):
@@ -47,15 +49,20 @@ class ReadVcfs:
                     subprocess.run(['tabix', '-p', 'vcf', vcf+".vcf"])
             command = 'bcftools merge --force-samples ' + path+"*.gz" + ' -o ' + path+'INPUT.vcf'
             subprocess.run(command, shell=True)
-        vcfdata = allel.read_vcf(path+'INPUT.vcf', fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
+            vcfdata = allel.read_vcf(path+'INPUT.vcf', fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
+            vcfdf = allel.vcf_to_dataframe(path + 'INPUT.vcf', exclude_fields=['QUAL', 'FILTER_PASS', 'ID'])
+        else :
+            vcffile = [_ for _ in os.listdir(self.path) if _.endswith('.vcf')]
+            vcfdata = allel.read_vcf(self.path + vcffile[0],fields=['samples', 'calldata/GT', 'variants/ALT', 'variants/REF', 'variants/CHROM','variants/POS', 'variants/svlen'])
         #vcfdata = allel.read_vcf("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf")
-        vcfdf = allel.vcf_to_dataframe(path+'INPUT.vcf', exclude_fields=['QUAL','FILTER_PASS', 'ID'])
+            vcfdf = allel.vcf_to_dataframe(self.path + vcffile[0], exclude_fields=['QUAL','FILTER_PASS', 'ID'])
         #vcfdf = allel.vcf_to_dataframe("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Alexa_VCF/denovo.Africa_Chr6.final_filtered_var_pca.vcf")
         sample_set = list(collections.OrderedDict.fromkeys(vcfdata['samples']))
         gt = allel.GenotypeArray(vcfdata['calldata/GT']).to_n_alt() # drop additional information
         gt_data = pd.DataFrame(gt, columns=sample_set)
 
-        result = pd.concat([vcfdf, gt_data], axis=1, join='inner')
+        data = pd.concat([vcfdf, gt_data], axis=1, join='inner')
+        return data
 
 class VariantList:
 
@@ -125,6 +132,47 @@ class VarGraphCons:
                 chromosomes.remove('\n')  # remove newlines if they slip in
             except ValueError:
                 pass
+
+            print('Finished')
+            rebuild_genome = ()
+            for i in chromosomes:
+                temp = [tuple(_, ) for _ in data[2:] if _[0] == i]  # split per chromosome - needed to add anchors
+                temp = (tuple([temp[0][0], str(int(temp[0][1]) - 1), ' ', 'REF'], ),) + tuple(temp)  # add chr start anchor
+                temp = tuple(temp) + (tuple([temp[len(temp) - 1][0], str(int(temp[len(temp) - 1][1]) + 1), ' ', 'REF']),)  # add chr end anchor
+                anchors = ()
+
+                for k in range(1, len(temp) - 1):
+                    if int(temp[k][1]) + 1 != int(temp[k + 1][1]) and int(temp[k][1]) - 1 != int(temp[k - 1][1]):
+                        anchor_string = tuple([temp[k][0], str(int(temp[k][1]) - 1), ' ', 'REF'])
+                        anchors = tuple(anchors) + ((anchor_string),)
+
+                anchors = tuple(anchors) + tuple(temp)
+                anchors = sorted(anchors)
+                rebuild_genome = tuple(rebuild_genome) + tuple(anchors)  # (((anchors)),)
+                with open(str(self.outDir + key + '_' + 'graph_anchors.txt'), 'w') as f:  # write to file as backup
+                    # convert tuple to string and write to file
+                    for ind in range(0, len(rebuild_genome) - 1):
+                        f.write(str(''.join(
+                            f'{rebuild_genome[ind][0]}\t{rebuild_genome[ind][1]}\t{rebuild_genome[ind][2]}\t{rebuild_genome[ind][3]}\n')))
+            graphdb[key] = rebuild_genome
+        return graphdb
+
+    ##scikit version
+    def sci_anchor_builder(self, dat, outDir):
+        self.dat = dat
+        self.outDir = outDir
+        # anchor_string = []
+
+        graphdb = {}
+        chromosomes = list(collections.OrderedDict.fromkeys(dat['CHROM']))
+        try:
+            chromosomes.remove('\n')  # remove newlines if they slip in
+        except ValueError:
+            pass
+
+        for key in list(dat.keys()):  # This function adds REFERENCE anchors - allowing merging back to reference positions
+            data = dat[key].vcf_reader()
+            # need to split into chromosomes to add anchors. Could pull chr lengths in from gff?
 
             print('Finished')
             rebuild_genome = ()

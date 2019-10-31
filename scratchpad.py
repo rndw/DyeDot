@@ -294,3 +294,9 @@ vcfdf = allel.vcf_to_dataframe("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Wor
 
 vcfdata.keys()
 set(vcfdata['variants/CHROM'])
+
+regiondata = dat[dat['CHROM'] == 'chr6']
+
+testdat = regiondata[0:20]
+
+refpath = pd.concat([testdat.iloc[::2][["POS","REF"]].reset_index(drop=True), testdat.iloc[1::2][["POS","REF"]].reset_index(drop=True)], axis=1)

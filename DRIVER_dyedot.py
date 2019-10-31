@@ -107,6 +107,7 @@ if not args.r:
     #CREATE A DICTIONARY OBJECT LINKING EACH KEY TO A VCF
     #Use scikit-allel to read in multivcf
     dat = ReadVcfs(path).variant_builder()
+    dat = ReadVcfs(path).sci_variant_bldr()
     #EXIT IF THE DIR CONTAINS NO VCFs
     if not dat:
         print(f"No vcf files in directory. Please check path: {path}")
@@ -127,7 +128,7 @@ if not args.r:
     #CONSTRUCT THE REFERENCE PATH
     graph, refnodedata, refedgedata = RefGraphBuilder(refpath=refpath).referencepath()
 
-    #CONSTRUCT THE VARAINT PATHS: BUILT ON TOP OF THE REFERENCE PATH
+    #CONSTRUCT THE VARIANT PATHS: BUILT ON TOP OF THE REFERENCE PATH
     xgraph, varnodedata, varedgedata, allvarnode, allvaredge = RefGraphBuilder(refpath=refpath).variantpath(output, graph, loci, refpath)
 
     #Write objects to disk to resume
