@@ -66,3 +66,5 @@ for line in reader:
 data = pd.DataFrame.from_dict(df, orient='index')
 data = data.set_index(['CHROM', 'POS', 'REF', 'sample'])
 print(time() - start)
+
+

@@ -1,0 +1,18 @@
+digraph YI12 {
+	graph [rankdir=LR splines=spline]
+	"352 C" [label="352 C"]
+	352 -> "352 C" [label=Y12]
+	"352 C" -> 1464 [label=Y12]
+	"1464 C" [label="1464 C"]
+	1464 -> "1464 C" [label=Y12]
+	"1464 C" -> 1468 [label=Y12]
+	"1468 A" [label="1468 A"]
+	1468 -> "1468 A" [label=Y12]
+	"1468 A" -> 1479 [label=Y12]
+	"1479 C" [label="1479 C"]
+	1479 -> "1479 C" [label=Y12]
+	"1479 C" -> 1871 [label=Y12]
+	"1871 A" [label="1871 A"]
+	1871 -> "1871 A" [label=Y12]
+	"1871 A" -> 1872 [label=Y12]
+}
