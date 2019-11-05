@@ -6,6 +6,9 @@ import pandas as pd
 import numpy as np
 import os
 
+#vcfdata = allel.read_vcf("/home/rndw/Downloads/INPUT.vcf", fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
+#vcfdf = allel.vcf_to_dataframe("/home/rndw/Downloads/INPUT.vcf", exclude_fields=['QUAL','FILTER_PASS', 'ID'])
+
 vcfdata = allel.read_vcf("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Testing/VCFs/INPUT.vcf", fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
 vcfdf = allel.vcf_to_dataframe("/mnt/9e6ae416-938b-4e9a-998e-f2c5b22032d2/PD/Workspace/Testing/VCFs/INPUT.vcf", exclude_fields=['QUAL','FILTER_PASS', 'ID'])
 sample_set = list(collections.OrderedDict.fromkeys(vcfdata['samples']))
@@ -156,9 +159,34 @@ fig = go.Figure()
 
 regiondata['REFy'] = 0
 
-with open('/home/rndw/Github/DyeDot/DyeDotOutput/DDbackup.pickle', 'rb') as resumeFile:
-    objsToWrite = pickle.load(resumeFile)
+# create edgedata
+# format : [1,2,None,2,3,None]
+edge_x = []
+edge_y = []
+#start = time()
+#for i in range(len(regiondata)-1):
+#    edge_x.append(regiondata['POS'].iloc[i])
+#    edge_x.append(regiondata['POS'].iloc[i+1])
+#    edge_x.append(None)
+#print(time() - start)
 
+# extend runs faster
+#start = time()
+for i in range(len(regiondata)-1):
+    edge_x.extend([regiondata['POS'].iloc[i],regiondata['POS'].iloc[i+1],None])
+    edge_y.extend([0,0,None])
+#print(time() - start)
+
+
+################# Variant edges!!
+## need to work on if the nodes are next to each other
+## also need to bring in variant length
+regiondata.iloc[regiondata[regiondata['POS'] == variant.iloc[1][0]].index[0]-1]
+
+#with open('/home/rndw/Github/DyeDot/DyeDotOutput/DDbackup.pickle', 'rb') as resumeFile:
+#    objsToWrite = pickle.load(resumeFile)
+
+fig = go.Figure()
 xlabs = [regiondata['REF']]
 #        fig.add_trace(go.Scatter(
 #            x=regiondata['POS'], y=regiondata['REFy'],
@@ -182,14 +210,14 @@ xlabs = [regiondata['REF']]
         ))
 
     fig.add_trace(go.Scatter(
-        x=edge_xc, y=edge_yc,
+        x=edge_x, y=edge_y,
         line=dict(width=0.5, color='#888'),
         #hoverinfo='none',
         hoverinfo=['all'],
         mode='lines',
         name='REFERENCE',
         text=xlabs
-        )
+        ))
 
 fig.add_trace(go.Scatter(
     x=df1['POS'], y=df1['Y1'],
