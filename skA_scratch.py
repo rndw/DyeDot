@@ -5,6 +5,7 @@ import collections
 import pandas as pd
 import numpy as np
 import os
+import random
 
 #vcfdata = allel.read_vcf("/home/rndw/Downloads/INPUT.vcf", fields=['samples','calldata/GT','variants/ALT','variants/REF','variants/CHROM', 'variants/POS', 'variants/svlen'])
 #vcfdf = allel.vcf_to_dataframe("/home/rndw/Downloads/INPUT.vcf", exclude_fields=['QUAL','FILTER_PASS', 'ID'])
@@ -64,8 +65,8 @@ for i in range(len(regiondata) - 1):
 #dot.view()
 
 ## Variant
-variant = regiondata[["POS","Y12","ALT_1","ALT_2","ALT_3"]]
-variant = variant[variant["Y12"] > 0].reset_index(drop=True)
+variant = regiondata[["POS",'71', '72','DBVPG6044', 'DBVPG6765', 'E7A', 'J11P', 'MF1P', 'SK1', 'UWOPS03-461.4','UWOPS83-787.3', 'UWOPS87-2421', 'Y12', 'Y55', 'YI38P', 'YPS128',"ALT_1","ALT_2","ALT_3"]]
+variantsel = variant[variant["Y12"] > 0].reset_index(drop=True)
 
 #testdat = regiondata[0:20]
 #vdffrom = regiondata.iloc[::2][["POS","REF"]].reset_index(drop=True)
@@ -90,8 +91,8 @@ for i in range(1,len(variant) - 1):
 
 dot.subgraph(dotx)
 
-variant = regiondata[["POS","Y55","ALT_1","ALT_2","ALT_3"]]
-variant = variant[variant["Y55"] > 0].reset_index(drop=True)
+variantsel = regiondata[["POS","Y55","ALT_1","ALT_2","ALT_3"]]
+variantsel = variant[variant["Y55"] > 0].reset_index(drop=True)
 dotx = Digraph(name='Y55', graph_attr={'splines': 'spline', 'rankdir': 'LR'})
 fromnode = ""
 tonode = ""
@@ -155,9 +156,10 @@ import plotly.graph_objs as go
 
 #layout = go.Layout(yaxis=dict(range=[scaleYmin, scaleYmax]), xaxis=dict(range=[0, 500]))
 #fig = go.Figure(layout=layout)
-fig = go.Figure()
+#fig = go.Figure()
 
 regiondata['REFy'] = 0
+
 
 # create edgedata
 # format : [1,2,None,2,3,None]
@@ -176,29 +178,10 @@ for i in range(len(regiondata)-1):
     edge_x.extend([regiondata['POS'].iloc[i],regiondata['POS'].iloc[i+1],None])
     edge_y.extend([0,0,None])
 #print(time() - start)
-
-
-################# Variant edges!!
-## need to work on if the nodes are next to each other
-## also need to bring in variant length
-regiondata.iloc[regiondata[regiondata['POS'] == variant.iloc[1][0]].index[0]-1]
-
-#with open('/home/rndw/Github/DyeDot/DyeDotOutput/DDbackup.pickle', 'rb') as resumeFile:
-#    objsToWrite = pickle.load(resumeFile)
-
+### REFERENCE
 fig = go.Figure()
 xlabs = [regiondata['REF']]
-#        fig.add_trace(go.Scatter(
-#            x=regiondata['POS'], y=regiondata['REFy'],
-#            line=dict(width=0.5, color='grey'),
-            # hoverinfo='none',
-#            hoverinfo=['all'],
-#            mode='lines',
-#            name='REFERENCE',
-#            text=xlabs
-#        ))
-
-        fig.add_trace(go.Scatter(
+fig.add_trace(go.Scatter(
             x=regiondata['POS'], y=regiondata['REFy'],
             mode='markers',
             hoverinfo='all',
@@ -209,36 +192,82 @@ xlabs = [regiondata['REF']]
             name='REFERENCE'
         ))
 
-    fig.add_trace(go.Scatter(
-        x=edge_x, y=edge_y,
-        line=dict(width=0.5, color='#888'),
+fig.add_trace(go.Scatter(
+    x=edge_x, y=edge_y,
+    line=dict(width=0.5, color='red'),
         #hoverinfo='none',
-        hoverinfo=['all'],
-        mode='lines',
-        name='REFERENCE',
-        text=xlabs
-        ))
+    hoverinfo=['all'],
+    mode='lines',
+    name='REFERENCE',
+    text=xlabs
+    ))
 
-fig.add_trace(go.Scatter(
-    x=df1['POS'], y=df1['Y1'],
-    mode='markers',
-    hoverinfo='all',
-    # hoverinfo='none',
-    marker=dict(size=6, line=dict(width=1, color='orange'), color='purple'),
-    line_width=1,
-    text='Y55',
-    name='Y55'
-))
+################# Variant edges!!
+## need to work on if the nodes are next to each other
+## also need to bring in variant length
+samples = ['71', '72','DBVPG6044', 'DBVPG6765', 'E7A', 'J11P', 'MF1P', 'SK1', 'UWOPS03-461.4','UWOPS83-787.3', 'UWOPS87-2421', 'Y12', 'Y55', 'YI38P', 'YPS128']
+#samples = ['E7A', 'J11P', 'MF1P']
+regiondata = regiondata.reset_index(drop=True)
+z=-0.1
+for k in samples:
+    variantsel = variant[variant[k] > 0][['POS',k]]
+    variantsel[str(k + 'y')] = z
+    variantsel = variantsel.reset_index(drop=True)
 
-fig.add_trace(go.Scatter(
-    x=df2['POS'], y=df2['Y2'],
-    mode='markers',
-    hoverinfo='all',
-    # hoverinfo='none',
-    marker=dict(size=6, line=dict(width=1, color='green'), color='blue'),
-    line_width=1,
-    text='Y12',
-    name='Y12'
-))
+    edge_xv = []
+    edge_yv = []
+    i = 0
+    for i in range(len(variantsel)-1):
+        fromedge = regiondata.loc[regiondata[regiondata['POS'] == variantsel.iloc[i][0]].index[0]-1]['POS']
+        toedge = variantsel.iloc[i][['POS','ALT_1']][0]
+        intedge = regiondata.loc[regiondata[regiondata['POS'] == variantsel.iloc[i][0]].index[0]+1]['POS']
+
+        edge_xv.extend([fromedge,toedge,None])
+        edge_yv.extend([0,z,None])
+
+        edge_xv.extend([toedge,intedge, None])
+        edge_yv.extend([z, 0, None])
+
+    colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+    colhexcode2 = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+    fig.add_trace(go.Scatter(
+        x=variantsel['POS'], y=variantsel[str(k + 'y')],
+        mode='markers',
+        hoverinfo='all',
+        # hoverinfo='none',
+        marker=dict(size=6, line=dict(width=1, color=colhexcode), color=colhexcode2),
+        line_width=1,
+        text=k,
+        name=k
+    ))
+    colhexcode = "#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+    fig.add_trace(go.Scatter(
+            x=edge_xv, y=edge_yv,
+            line=dict(width=0.5, color=colhexcode),
+            #hoverinfo='none',
+            hoverinfo=['all'],
+            mode='lines',
+            name=k,
+            ))
+    z = z - 0.1
+
+
+
+#with open('/home/rndw/Github/DyeDot/DyeDotOutput/DDbackup.pickle', 'rb') as resumeFile:
+#    objsToWrite = pickle.load(resumeFile)
+
+
+#        fig.add_trace(go.Scatter(
+#            x=regiondata['POS'], y=regiondata['REFy'],
+#            line=dict(width=0.5, color='grey'),
+            # hoverinfo='none',
+#            hoverinfo=['all'],
+#            mode='lines',
+#            name='REFERENCE',
+#            text=xlabs
+#        ))
+
+
 
 fig.write_html('DyeDot_int_output.html')
+
