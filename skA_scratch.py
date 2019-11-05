@@ -27,12 +27,12 @@ regiondata = regiondata.sort_index()
 regiondata.loc[len(regiondata)] = ['chrXIV',regiondata.iloc[len(regiondata)-1][1] + 1,'','','','',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 #testdat = regiondata[0:20]
-dffrom = regiondata.iloc[::2][["POS","REF"]].reset_index(drop=True)
+#dffrom = regiondata.iloc[::2][["POS","REF"]].reset_index(drop=True)
 #dffrom.columns = ["POSfrom","REFfrom"]
-dfto = regiondata.iloc[1::2][["POS","REF"]].reset_index(drop=True)
+#dfto = regiondata.iloc[1::2][["POS","REF"]].reset_index(drop=True)
 #dffrom.columns = ["POSto","REFto"]
-refpath = pd.concat([dffrom,dfto ], axis=1)
-refpath.columns = ["POSfrom","REFfrom", "POSto","REFto"]
+#refpath = pd.concat([dffrom,dfto ], axis=1)
+#refpath.columns = ["POSfrom","REFfrom", "POSto","REFto"]
 
 
 ## Draw graph
@@ -52,6 +52,7 @@ for i in range(len(regiondata) - 1):
         dot.node(fromnode, label= fromnode)
         dot.node(tonode, label= tonode)
         dot.edge(fromnode, tonode,label="")
+
 
 #dot.node(str(refpath["POSfrom"][len(refpath) - 1]), label=str(refpath["POSfrom"][len(refpath) - 1]) + " " + str(refpath["REFfrom"][len(refpath) - 1]))
 #dot.node(str(refpath["POSto"][len(refpath) - 1]), label=str(refpath["POSto"][len(refpath) - 1]) + " " + str(refpath["REFto"][len(refpath) - 1]))
@@ -122,29 +123,29 @@ dot.save("scioutput.dot")
 #dot.view()
 
 ## testing
-str(refpath.loc[refpath.index[refpath['POSfrom'] == variant['POS'][i]]-1])
+#str(refpath.loc[refpath.index[refpath['POSfrom'] == variant['POS'][i]]-1])
 
 
 #pandas plot
 import matplotlib.pyplot as plt
 
-df = regiondata.copy(deep = True)
-df1 = df.loc[df['Y55'] > 0, 'Y55'] = df.loc[df['Y55'] > 0, 'POS']
-df2 = df.loc[df['Y12'] > 0, 'Y12'] = df.loc[df['Y12'] > 0, 'POS']
-df1 = pd.DataFrame(data = df1)
-df1['Y1'] = 1
-df2 = pd.DataFrame(data = df2)
-df2['Y2'] = 2
+#df = regiondata.copy(deep = True)
+#df1 = df.loc[df['Y55'] > 0, 'Y55'] = df.loc[df['Y55'] > 0, 'POS']
+#df2 = df.loc[df['Y12'] > 0, 'Y12'] = df.loc[df['Y12'] > 0, 'POS']
+#df1 = pd.DataFrame(data = df1)
+#df1['Y1'] = 1
+#df2 = pd.DataFrame(data = df2)
+#df2['Y2'] = 2
 
-select.plot(kind='scatter',x='POS',y='Y55',color='red')
+#select.plot(kind='scatter',x='POS',y='Y55',color='red')
 
 # OR
-ax = plt.gca()
+#ax = plt.gca()
 
-df1.plot(kind='scatter',x='POS',y='Y1',ax=ax)
-df2.plot(kind='scatter',x='POS',y='Y2', color='red', ax=ax)
+#df1.plot(kind='scatter',x='POS',y='Y1',ax=ax)
+#df2.plot(kind='scatter',x='POS',y='Y2', color='red', ax=ax)
 
-plt.show()
+#plt.show()
 
 ## PLOTLY
 import plotly.graph_objs as go
@@ -154,6 +155,9 @@ import plotly.graph_objs as go
 fig = go.Figure()
 
 regiondata['REFy'] = 0
+
+with open('/home/rndw/Github/DyeDot/DyeDotOutput/DDbackup.pickle', 'rb') as resumeFile:
+    objsToWrite = pickle.load(resumeFile)
 
 xlabs = [regiondata['REF']]
 #        fig.add_trace(go.Scatter(
@@ -176,6 +180,16 @@ xlabs = [regiondata['REF']]
             text=xlabs,
             name='REFERENCE'
         ))
+
+    fig.add_trace(go.Scatter(
+        x=edge_xc, y=edge_yc,
+        line=dict(width=0.5, color='#888'),
+        #hoverinfo='none',
+        hoverinfo=['all'],
+        mode='lines',
+        name='REFERENCE',
+        text=xlabs
+        )
 
 fig.add_trace(go.Scatter(
     x=df1['POS'], y=df1['Y1'],
